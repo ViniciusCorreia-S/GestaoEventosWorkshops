@@ -20,7 +20,9 @@
                     <div class="card login-card shadow-sm">
 						<div class="card-body p-4">
 							<span class="badge text-bg-primary logo-badge mb-3">GestonSys+</span>
-							<img src="Img/Logo-GestonSys+.png" />
+							<a href="index.html">
+								<img src="Img/Logo-GestonSys+.png" draggable="false"/>
+							</a>	
 							<h1 class="h3 mb-2">Gestão de Eventos</h1>
 							<p class="text-muted mb-4">Entre para acessar participantes, eventos, workshops e inscrições.</p>
 							<!--============================================= FORMULÁRIO DE LOGIN ================================================-->
@@ -42,15 +44,15 @@
 								<form id="cadastroContaForm" class="vstack gap-3">
 									<div>
 										<label class="form-label" for="contaNome">Nome</label>
-										<input class="form-control" id="contaNome" required maxlength="120">
+										<input class="form-control" id="contaNome" required maxlength="120" placeholder="Digite seu nome">
 									</div>
 									<div>
 										<label class="form-label" for="contaEmail">E-mail</label>
-										<input class="form-control" id="contaEmail" type="email" required maxlength="160">
+										<input class="form-control" id="contaEmail" type="email" required maxlength="160"  placeholder="ex: exe@exemplo.com">
 									</div>
 									<div>
 										<label class="form-label" for="contaCodigo">Código de inscrição</label>
-										<input class="form-control" id="contaCodigo" required maxlength="20">
+										<input class="form-control" id="contaCodigo" required maxlength="20" placeholder="ex: 123456">
 									</div>
 									<div>
 										<label class="form-label" for="contaDataNascimento">Data de nascimento</label>
@@ -565,7 +567,7 @@
                     <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Fechar"></button>
                 </div>
                 <div class="modal-body">
-                    <p class="mb-0" id="loginErroMensagem">Usuário ou senha inválidos.</p>
+                    <p class="mb-0" id="loginErroMensagem"></p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Entendi</button>

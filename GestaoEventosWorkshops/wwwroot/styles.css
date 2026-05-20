@@ -64,6 +64,7 @@ body {
 .container img {
     max-width: 110px;
     height: auto;
+    cursor: pointer;
 }
 
 .navbar-brand {
@@ -468,6 +469,10 @@ body {
 
     .text-end .btn {
         margin-top: .25rem;
+    }
+
+    .logo-badge {
+        display: none;
     }
 }
 
