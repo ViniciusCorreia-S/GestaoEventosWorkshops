@@ -111,8 +111,6 @@ var app = builder.Build();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-app.UseHttpsRedirection();
-
 // Habilitando a interface web em wwwroot (index.html, app.js, styles.css)
 app.UseDefaultFiles();
 app.UseStaticFiles();
