@@ -14,8 +14,15 @@ var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
 builder.WebHost.UseUrls($"http://0.0.0.0:{port}");
 
 // Configuracao da string de conexao para MySQL, obtida do appsettings.json
-var connectionString = builder.Configuration.GetConnectionString("ConexaoPadrao")
-    ?? throw new InvalidOperationException("ConnectionString ConexaoPadrao nao configurada.");
+var connectionString =
+	Environment.GetEnvironmentVariable("ConnectionStrings__ConexaoPadrao");
+
+Console.WriteLine($"CONNECTION STRING: {connectionString}");
+
+if (string.IsNullOrEmpty(connectionString))
+{
+	throw new Exception("VARIAVEL NAO ENCONTRADA");
+}
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
