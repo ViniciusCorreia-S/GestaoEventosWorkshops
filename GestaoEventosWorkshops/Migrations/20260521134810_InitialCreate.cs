@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace GestaoEventosWorkshops.Migrations
 {
     /// <inheritdoc />
-    public partial class InicialGestaoEventos : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
