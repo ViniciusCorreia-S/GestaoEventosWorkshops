@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoEventosWorkshops.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260521134810_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20260518203749_InicialGestaoEventos")]
+    partial class InicialGestaoEventos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
