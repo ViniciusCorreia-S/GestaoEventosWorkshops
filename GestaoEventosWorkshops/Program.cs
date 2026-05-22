@@ -9,6 +9,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddHealthChecks();
+
 // Configuracao da string de conexao para MySQL, obtida do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("ConexaoPadrao")
 	?? throw new InvalidOperationException("ConnectionString ConexaoPadrao nao configurada.");
@@ -96,6 +101,8 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+app.UseHealthChecks("/health");
 
 if (app.Environment.IsDevelopment())
 {
