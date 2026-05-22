@@ -12,7 +12,7 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["GestaoEventosWorkshops/GestaoEventosWorkshops.csproj", "GestaoEventosWorkshops/"]
+COPY ["GestaoEventosWorkshops.csproj", "./"]
 RUN dotnet restore "./GestaoEventosWorkshops/GestaoEventosWorkshops.csproj"
 COPY . .
 WORKDIR "/src/GestaoEventosWorkshops"
