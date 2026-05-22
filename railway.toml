@@ -1,8 +1,8 @@
 [build]
 builder = "dockerfile"
-dockerfilePath = "./RailwayDeploymentAot/Dockerfile"
+dockerfilePath = "./GestaoEventosWorkshops/Dockerfile"
 
 [deploy]
-startCommand = "./RailwayDeploymentAot"
+startCommand = "./GestaoEventosWorkshops"
 restartPolicyType = "always"
 healthCheckPath = "/health"
