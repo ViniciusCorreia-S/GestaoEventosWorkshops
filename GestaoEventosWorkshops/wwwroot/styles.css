@@ -22,7 +22,7 @@ body {
 .login-page {
     align-items: center;
     display: flex;
-    min-height: 100vh;
+    min-height: calc(100vh - 67px);
     padding: 2rem 0;
 }
 
@@ -450,6 +450,19 @@ body {
 
 .status-dot.inactive {
     background: var(--color-danger);
+}
+
+.site-footer {
+    background: var(--color-primary);
+    border-top: 3px solid var(--color-secondary);
+    color: rgba(255, 255, 255, .88);
+    font-size: .9rem;
+    padding: 1rem 0;
+}
+
+.site-footer span:first-child {
+    color: #fff;
+    font-weight: 700;
 }
 
 @media (max-width: 576px) {
