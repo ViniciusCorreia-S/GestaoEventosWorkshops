@@ -4,6 +4,7 @@ let participantes = [];
 let eventos = [];
 let workshops = [];
 let inscricoes = [];
+let organizadores = [];
 let exclusaoAtual = null;
 let perfilAtual = localStorage.getItem("perfil") || "";
 let participanteAtual = JSON.parse(localStorage.getItem("participanteAtual") || "null");
@@ -34,6 +35,7 @@ const elementos = {
     ativo: document.getElementById("ativo"),
     tabela: document.getElementById("participantesTabela"),
     btnAtualizar: document.getElementById("btnAtualizar"),
+    abaOrganizadoresItem: document.getElementById("abaOrganizadoresItem"),
     btnCancelar: document.getElementById("btnCancelar"),
     buscaParticipante: document.getElementById("buscaParticipante"),
     filtroEvento: document.getElementById("filtroEvento"),
@@ -56,6 +58,7 @@ const elementos = {
     eventoLocal: document.getElementById("eventoLocal"),
     eventoDataInicio: document.getElementById("eventoDataInicio"),
     eventoDataFim: document.getElementById("eventoDataFim"),
+    eventoOrganizadorId: document.getElementById("eventoOrganizadorId"),
     eventosTabela: document.getElementById("eventosTabela"),
     btnCancelarEvento: document.getElementById("btnCancelarEvento"),
     workshopForm: document.getElementById("workshopForm"),
@@ -74,6 +77,11 @@ const elementos = {
     exclusaoTexto: document.getElementById("exclusaoTexto"),
     registroExclusaoNome: document.getElementById("registroExclusaoNome"),
     btnConfirmarExclusao: document.getElementById("btnConfirmarExclusao"),
+    organizadorForm: document.getElementById("organizadorForm"),
+    organizadorNome: document.getElementById("organizadorNome"),
+    organizadorEmail: document.getElementById("organizadorEmail"),
+    organizadorSenha: document.getElementById("organizadorSenha"),
+    organizadoresTabela: document.getElementById("organizadoresTabela"),
     modalLoginErro: document.getElementById("modalLoginErro"),
     loginErroMensagem: document.getElementById("loginErroMensagem"),
     participanteHeaderNome: document.getElementById("participanteHeaderNome"),
@@ -330,11 +338,39 @@ async function iniciarAreaParticipante() {
 }
 
 async function carregarDadosHome() {
+    configurarPermissoesInterface();
+    await carregarOrganizadores();
     await carregarEventos();
     await carregarParticipantes();
     await carregarWorkshops();
     await carregarInscricoes();
     renderizarDashboard();
+}
+
+function configurarPermissoesInterface() {
+    const admin = perfilAtual === "Administrador";
+    elementos.abaOrganizadoresItem.classList.toggle("d-none", !admin);
+    [elementos.eventoForm, elementos.workshopForm, elementos.inscricaoForm].forEach(form => {
+        form.closest(".col-12").classList.toggle("d-none", !admin);
+    });
+}
+
+async function carregarOrganizadores() {
+    if (perfilAtual !== "Administrador") {
+        organizadores = [];
+        preencherSelectOrganizadores();
+        return;
+    }
+
+    const resultado = await requisicao(`${apiBase}/organizadores`);
+    organizadores = resultado.dados;
+    preencherSelectOrganizadores();
+    renderizarTabelaOrganizadores();
+}
+
+function preencherSelectOrganizadores() {
+    const opcoes = organizadores.map(organizador => `<option value="${organizador.id}">${escaparHtml(organizador.nome)}</option>`).join("");
+    elementos.eventoOrganizadorId.innerHTML = `<option value="">Sem responsável</option>${opcoes}`;
 }
 
 async function carregarEventos() {
@@ -355,7 +391,7 @@ function renderizarTabelaEventos() {
         elementos.eventosTabela.innerHTML = `<tr><td colspan="5" class="text-center py-4">Nenhum evento cadastrado.</td></tr>`;
         return;
     }
-    elementos.eventosTabela.innerHTML = eventos.map(evento => `<tr><td>${escaparHtml(evento.codigo)}</td><td>${escaparHtml(evento.nome)}</td><td>${escaparHtml(evento.local)}</td><td>${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}</td><td class="text-end"><button class="btn btn-outline-secondary btn-sm" onclick="editarEvento(${evento.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoEvento(${evento.id})">Excluir</button></td></tr>`).join("");
+    elementos.eventosTabela.innerHTML = eventos.map(evento => `<tr><td>${escaparHtml(evento.codigo)}</td><td>${escaparHtml(evento.nome)}<div class="small text-muted">${escaparHtml(evento.organizadorNome || "Sem responsável")}</div></td><td>${escaparHtml(evento.local)}</td><td>${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}</td><td class="text-end">${perfilAtual === "Administrador" ? `<button class="btn btn-outline-secondary btn-sm" onclick="editarEvento(${evento.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoEvento(${evento.id})">Excluir</button>` : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
 }
 
 function editarEvento(id) {
@@ -367,6 +403,7 @@ function editarEvento(id) {
     elementos.eventoLocal.value = evento.local;
     elementos.eventoDataInicio.value = evento.dataInicio;
     elementos.eventoDataFim.value = evento.dataFim;
+    elementos.eventoOrganizadorId.value = evento.organizadorId || "";
 }
 
 function limparFormularioEvento() {
@@ -382,13 +419,36 @@ async function salvarEvento(evento) {
         codigo: elementos.eventoCodigo.value,
         local: elementos.eventoLocal.value,
         dataInicio: elementos.eventoDataInicio.value,
-        dataFim: elementos.eventoDataFim.value
+        dataFim: elementos.eventoDataFim.value,
+        organizadorId: elementos.eventoOrganizadorId.value ? Number(elementos.eventoOrganizadorId.value) : null
     };
     await salvar(`${apiBase}/eventos${id ? `/${id}` : ""}`, id ? "PUT" : "POST", corpo, id ? "Evento atualizado com sucesso." : "Evento cadastrado com sucesso.", async () => {
         limparFormularioEvento();
         await carregarEventos();
         await carregarWorkshops();
     }, elementos.eventoForm);
+}
+
+function renderizarTabelaOrganizadores() {
+    if (!organizadores.length) {
+        elementos.organizadoresTabela.innerHTML = `<tr><td colspan="3" class="text-center py-4">Nenhum organizador cadastrado.</td></tr>`;
+        return;
+    }
+
+    elementos.organizadoresTabela.innerHTML = organizadores.map(organizador => `<tr><td>${escaparHtml(organizador.nome)}</td><td>${escaparHtml(organizador.email)}</td><td><span class="status-dot ${organizador.ativo ? "active" : "inactive"}"></span> ${organizador.ativo ? "Ativo" : "Inativo"}</td></tr>`).join("");
+}
+
+async function salvarOrganizador(evento) {
+    evento.preventDefault();
+    const corpo = {
+        nome: elementos.organizadorNome.value,
+        email: elementos.organizadorEmail.value,
+        senha: elementos.organizadorSenha.value
+    };
+    await salvar(`${apiBase}/organizadores`, "POST", corpo, "Organizador cadastrado com sucesso.", async () => {
+        elementos.organizadorForm.reset();
+        await carregarOrganizadores();
+    }, elementos.organizadorForm);
 }
 
 async function carregarParticipantes() {
@@ -475,7 +535,7 @@ function renderizarTabelaWorkshops() {
         elementos.workshopsTabela.innerHTML = `<tr><td colspan="5" class="text-center py-4">Nenhum workshop cadastrado.</td></tr>`;
         return;
     }
-    elementos.workshopsTabela.innerHTML = workshops.map(workshop => `<tr><td>${escaparHtml(workshop.codigo)}</td><td>${escaparHtml(workshop.nome)}</td><td>${escaparHtml(workshop.eventoNome)}</td><td>${workshop.cargaHoraria}h</td><td class="text-end"><button class="btn btn-outline-secondary btn-sm" onclick="editarWorkshop(${workshop.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoWorkshop(${workshop.id})">Excluir</button></td></tr>`).join("");
+    elementos.workshopsTabela.innerHTML = workshops.map(workshop => `<tr><td>${escaparHtml(workshop.codigo)}</td><td>${escaparHtml(workshop.nome)}</td><td>${escaparHtml(workshop.eventoNome)}</td><td>${workshop.cargaHoraria}h</td><td class="text-end">${perfilAtual === "Administrador" ? `<button class="btn btn-outline-secondary btn-sm" onclick="editarWorkshop(${workshop.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoWorkshop(${workshop.id})">Excluir</button>` : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
 }
 
 function editarWorkshop(id) {
@@ -662,7 +722,7 @@ function renderizarTabelaInscricoes() {
         elementos.inscricoesTabela.innerHTML = `<tr><td colspan="6" class="text-center py-4">Nenhuma inscricao realizada.</td></tr>`;
         return;
     }
-    elementos.inscricoesTabela.innerHTML = inscricoes.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td><td class="text-end">${renderizarAcoesInscricao(inscricao)}</td></tr>`).join("");
+    elementos.inscricoesTabela.innerHTML = inscricoes.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td><td class="text-end">${perfilAtual === "Administrador" ? renderizarAcoesInscricao(inscricao) : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
 }
 
 async function salvarInscricao(evento) {
@@ -872,6 +932,7 @@ elementos.btnCancelar.addEventListener("click", limparFormulario);
 elementos.form.addEventListener("submit", salvarParticipante);
 elementos.eventoForm.addEventListener("submit", salvarEvento);
 elementos.btnCancelarEvento.addEventListener("click", limparFormularioEvento);
+elementos.organizadorForm.addEventListener("submit", salvarOrganizador);
 elementos.workshopForm.addEventListener("submit", salvarWorkshop);
 elementos.btnCancelarWorkshop.addEventListener("click", limparFormularioWorkshop);
 elementos.inscricaoForm.addEventListener("submit", salvarInscricao);

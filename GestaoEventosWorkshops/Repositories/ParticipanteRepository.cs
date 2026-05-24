@@ -20,6 +20,14 @@ public class ParticipanteRepository : IParticipanteRepository
             .ToListAsync();
     }
 
+    public async Task<List<Participante>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        return await _context.Participantes
+            .Where(participante => participante.Inscricoes.Any(inscricao => inscricao.Workshop!.Evento!.OrganizadorId == organizadorId))
+            .OrderBy(participante => participante.Nome)
+            .ToListAsync();
+    }
+
     public async Task<Participante?> BuscarPorIdAsync(int id)
     {
         return await _context.Participantes.FirstOrDefaultAsync(participante => participante.Id == id);

@@ -112,6 +112,9 @@
 				<li class="nav-item" role="presentation">
 					<button class="nav-link" id="abaInscricoesBotao" data-bs-toggle="tab" data-bs-target="#abaInscricoes" type="button" role="tab" aria-controls="abaInscricoes" aria-selected="false">Inscrições</button>
 				</li>
+				<li class="nav-item" role="presentation" id="abaOrganizadoresItem">
+					<button class="nav-link" id="abaOrganizadoresBotao" data-bs-toggle="tab" data-bs-target="#abaOrganizadores" type="button" role="tab" aria-controls="abaOrganizadores" aria-selected="false">Organizadores</button>
+				</li>
 			</ul>
 
 			<!--====================================================== CARDS DE MÉTRICAS ===============================================================-->
@@ -295,6 +298,12 @@
 											<label class="form-label" for="eventoDataFim">Data de fim</label>
 											<input class="form-control" id="eventoDataFim" type="date" required>
 										</div>
+										<div>
+											<label class="form-label" for="eventoOrganizadorId">Organizador responsável</label>
+											<select class="form-select" id="eventoOrganizadorId">
+												<option value="">Sem responsável</option>
+											</select>
+										</div>
 										<div class="d-flex gap-2">
 											<button class="btn btn-success flex-fill" type="submit">Salvar</button>
 											<button class="btn btn-outline-secondary" id="btnCancelarEvento" type="button">Limpar</button>
@@ -424,6 +433,48 @@
 										</tr>
 									</thead>
 									<tbody id="inscricoesTabela"></tbody>
+								</table>
+							</div>
+						</div>
+					</div>
+				</section>
+
+				<section class="tab-pane fade" id="abaOrganizadores" role="tabpanel" aria-labelledby="abaOrganizadoresBotao" tabindex="0">
+					<div class="row g-4">
+						<div class="col-12 col-xl-4">
+							<div class="card">
+								<div class="card-header fw-semibold">Conta de organizador</div>
+								<div class="card-body">
+									<form id="organizadorForm" class="vstack gap-3">
+										<div>
+											<label class="form-label" for="organizadorNome">Nome</label>
+											<input class="form-control" id="organizadorNome" required maxlength="120">
+										</div>
+										<div>
+											<label class="form-label" for="organizadorEmail">E-mail</label>
+											<input class="form-control" id="organizadorEmail" type="email" required maxlength="160">
+										</div>
+										<div>
+											<label class="form-label" for="organizadorSenha">Senha</label>
+											<input class="form-control" id="organizadorSenha" type="password" required minlength="6" maxlength="80" autocomplete="new-password">
+										</div>
+										<button class="btn btn-success" type="submit">Criar organizador</button>
+									</form>
+								</div>
+							</div>
+						</div>
+						<div class="col-12 col-xl-8">
+							<h2 class="h5 mb-3">Organizadores cadastrados</h2>
+							<div class="table-responsive">
+								<table class="table table-striped table-hover align-middle">
+									<thead>
+										<tr>
+											<th>Nome</th>
+											<th>E-mail</th>
+											<th>Status</th>
+										</tr>
+									</thead>
+									<tbody id="organizadoresTabela"></tbody>
 								</table>
 							</div>
 						</div>

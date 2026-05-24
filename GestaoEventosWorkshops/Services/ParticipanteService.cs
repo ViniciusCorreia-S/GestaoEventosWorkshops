@@ -19,6 +19,12 @@ public class ParticipanteService : IParticipanteService
         return participantes.Select(MapearParticipante).ToList();
     }
 
+    public async Task<List<ParticipanteResponseDto>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        var participantes = await _participanteRepository.ListarPorOrganizadorAsync(organizadorId);
+        return participantes.Select(MapearParticipante).ToList();
+    }
+
     public async Task<ParticipanteResponseDto?> BuscarPorIdAsync(int id)
     {
         var participante = await _participanteRepository.BuscarPorIdAsync(id);

@@ -21,11 +21,25 @@ public class InscricoesController : ControllerBase
     [Authorize(Policy = "EquipeEventos")]
     public async Task<IActionResult> Get()
     {
+        if (User.IsInRole("Organizador") && TryGetOrganizadorId(out var organizadorId))
+        {
+            return Ok(new
+            {
+                sucesso = true,
+                dados = await _service.ListarPorOrganizadorAsync(organizadorId)
+            });
+        }
+
         return Ok(new
         {
             sucesso = true,
             dados = await _service.ListarTodosAsync()
         });
+    }
+
+    private bool TryGetOrganizadorId(out int organizadorId)
+    {
+        return int.TryParse(User.FindFirstValue("organizadorId"), out organizadorId);
     }
 
     [HttpGet("minhas")]
@@ -46,7 +60,7 @@ public class InscricoesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "EquipeEventos")]
+    [Authorize(Policy = "SomenteAdministrador")]
     public async Task<IActionResult> Post([FromBody] InscricaoCreateDto dto)
     {
         try
@@ -66,7 +80,7 @@ public class InscricoesController : ControllerBase
     }
 
     [HttpPatch("{id:int}/status")]
-    [Authorize(Policy = "EquipeEventos")]
+    [Authorize(Policy = "SomenteAdministrador")]
     public async Task<IActionResult> AtualizarStatus(int id, [FromBody] InscricaoStatusUpdateDto dto)
     {
         try

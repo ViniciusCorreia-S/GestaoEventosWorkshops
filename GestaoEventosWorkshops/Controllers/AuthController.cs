@@ -14,12 +14,14 @@ public class AuthController : ControllerBase
 {
     private readonly IConfiguration _configuration;
     private readonly IParticipanteService _participanteService;
+    private readonly IOrganizadorService _organizadorService;
     private readonly ILogger<AuthController> _logger;
 
-    public AuthController(IConfiguration configuration, IParticipanteService participanteService, ILogger<AuthController> logger)
+    public AuthController(IConfiguration configuration, IParticipanteService participanteService, IOrganizadorService organizadorService, ILogger<AuthController> logger)
     {
         _configuration = configuration;
         _participanteService = participanteService;
+        _organizadorService = organizadorService;
         _logger = logger;
     }
 
@@ -39,6 +41,23 @@ public class AuthController : ControllerBase
                 usuario = login.Usuario,
                 perfil,
                 token = tokenEquipe
+            });
+        }
+
+        var organizador = await _organizadorService.BuscarPorCredenciaisAsync(login.Usuario, login.Senha);
+        if (organizador is not null)
+        {
+            var tokenOrganizador = GerarToken(organizador.Email, "Organizador", organizadorId: organizador.Id.ToString());
+
+            _logger.LogInformation($"Organizador {organizador.Id} logado com sucesso.");
+
+            return Ok(new
+            {
+                sucesso = true,
+                usuario = organizador.Email,
+                perfil = "Organizador",
+                organizador,
+                token = tokenOrganizador
             });
         }
 
@@ -76,7 +95,7 @@ public class AuthController : ControllerBase
         };
     }
 
-    private string GerarToken(string usuario, string perfil, string? participanteId = null)
+    private string GerarToken(string usuario, string perfil, string? participanteId = null, string? organizadorId = null)
     {
         var jwtKey = _configuration["Jwt:Key"]
             ?? throw new InvalidOperationException("Jwt:Key nao configurada.");
@@ -91,6 +110,11 @@ public class AuthController : ControllerBase
         if (!string.IsNullOrWhiteSpace(participanteId))
         {
             claims.Add(new Claim(ClaimTypes.NameIdentifier, participanteId));
+        }
+
+        if (!string.IsNullOrWhiteSpace(organizadorId))
+        {
+            claims.Add(new Claim("organizadorId", organizadorId));
         }
 
         var tokenDescriptor = new SecurityTokenDescriptor

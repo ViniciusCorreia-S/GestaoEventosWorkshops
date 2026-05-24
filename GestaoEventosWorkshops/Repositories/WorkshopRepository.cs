@@ -21,6 +21,15 @@ public class WorkshopRepository : IWorkshopRepository
             .ToListAsync();
     }
 
+    public async Task<List<Workshop>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        return await _context.Workshops
+            .Include(workshop => workshop.Evento)
+            .Where(workshop => workshop.Evento!.OrganizadorId == organizadorId)
+            .OrderBy(workshop => workshop.Nome)
+            .ToListAsync();
+    }
+
     public async Task<Workshop?> BuscarPorIdAsync(int id)
     {
         return await _context.Workshops

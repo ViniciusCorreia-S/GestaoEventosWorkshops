@@ -23,6 +23,12 @@ public class InscricaoService : IInscricaoService
         return inscricoes.Select(MapearInscricao).ToList();
     }
 
+    public async Task<List<InscricaoResponseDto>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        var inscricoes = await _inscricaoRepository.ListarPorOrganizadorAsync(organizadorId);
+        return inscricoes.Select(MapearInscricao).ToList();
+    }
+
     public async Task<List<InscricaoResponseDto>> ListarPorParticipanteAsync(int participanteId)
     {
         var inscricoes = await _inscricaoRepository.ListarPorParticipanteAsync(participanteId);

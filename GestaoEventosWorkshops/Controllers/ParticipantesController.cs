@@ -2,6 +2,7 @@ using GestaoEventosWorkshops.DTOs;
 using GestaoEventosWorkshops.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace GestaoEventosWorkshops.Controllers;
 
@@ -23,6 +24,15 @@ public class ParticipantesController : ControllerBase
     [AllowAnonymous]
     public async Task<IActionResult> Get()
     {
+        if (User.IsInRole("Organizador") && int.TryParse(User.FindFirstValue("organizadorId"), out var organizadorId))
+        {
+            return Ok(new
+            {
+                sucesso = true,
+                dados = await _service.ListarPorOrganizadorAsync(organizadorId)
+            });
+        }
+
         return Ok(new
         {
             sucesso = true,

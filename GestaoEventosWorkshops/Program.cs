@@ -58,10 +58,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Registrando os repositÃ³rios e serviÃ§os para injeÃ§Ã£o de dependÃªncia
 builder.Services.AddScoped<IParticipanteRepository, ParticipanteRepository>();
+builder.Services.AddScoped<IOrganizadorRepository, OrganizadorRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
 builder.Services.AddScoped<IWorkshopRepository, WorkshopRepository>();
 builder.Services.AddScoped<IInscricaoRepository, InscricaoRepository>();
 builder.Services.AddScoped<IParticipanteService, ParticipanteService>();
+builder.Services.AddScoped<IOrganizadorService, OrganizadorService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
 builder.Services.AddScoped<IWorkshopService, WorkshopService>();
 builder.Services.AddScoped<IInscricaoService, InscricaoService>();

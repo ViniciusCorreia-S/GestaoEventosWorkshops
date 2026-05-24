@@ -18,4 +18,6 @@ public class EventoCreateDto
 
     [Required]
     public DateOnly DataFim { get; set; }
+
+    public int? OrganizadorId { get; set; }
 }

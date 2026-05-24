@@ -5,6 +5,7 @@ namespace GestaoEventosWorkshops.Services;
 public interface IParticipanteService
 {
     Task<List<ParticipanteResponseDto>> ListarTodosAsync();
+    Task<List<ParticipanteResponseDto>> ListarPorOrganizadorAsync(int organizadorId);
     Task<ParticipanteResponseDto?> BuscarPorIdAsync(int id);
     Task<ParticipanteResponseDto?> BuscarPorCredenciaisAsync(string email, string codigoInscricao);
     Task<ParticipanteResponseDto> CriarAsync(ParticipanteCreateDto dto);
