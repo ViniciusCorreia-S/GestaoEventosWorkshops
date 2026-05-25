@@ -74,15 +74,35 @@ public class InscricaoService : IInscricaoService
         if (inscricao is null)
             return null;
 
+        await AplicarStatusAsync(inscricao, dto);
+
+        var inscricaoAtualizada = await _inscricaoRepository.BuscarPorIdAsync(id);
+        return MapearInscricao(inscricaoAtualizada!);
+    }
+
+    public async Task<InscricaoResponseDto?> AtualizarStatusPorOrganizadorAsync(int id, int organizadorId, InscricaoStatusUpdateDto dto)
+    {
+        var inscricao = await _inscricaoRepository.BuscarPorIdAsync(id);
+        if (inscricao is null)
+            return null;
+
+        if (inscricao.Workshop?.Evento?.OrganizadorId != organizadorId)
+            throw new UnauthorizedAccessException("Voce so pode editar inscricoes dos eventos sob sua responsabilidade.");
+
+        await AplicarStatusAsync(inscricao, dto);
+
+        var inscricaoAtualizada = await _inscricaoRepository.BuscarPorIdAsync(id);
+        return MapearInscricao(inscricaoAtualizada!);
+    }
+
+    private async Task AplicarStatusAsync(InscricaoWorkshop inscricao, InscricaoStatusUpdateDto dto)
+    {
         var status = NormalizarStatus(dto.Status);
         if (!StatusPermitidos.Contains(status))
             throw new InvalidOperationException("Status invalido. Use Inscrito, Compareceu ou Concluido.");
 
         inscricao.Status = status;
         await _inscricaoRepository.AtualizarAsync(inscricao);
-
-        var inscricaoAtualizada = await _inscricaoRepository.BuscarPorIdAsync(id);
-        return MapearInscricao(inscricaoAtualizada!);
     }
 
     public async Task<bool> RemoverAsync(int id)

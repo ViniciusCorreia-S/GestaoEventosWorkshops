@@ -239,7 +239,7 @@ function mostrarTelaLogin() {
     elementos.loginPage.classList.remove("d-none");
     elementos.homePage.classList.add("d-none");
     elementos.participantPage.classList.add("d-none");
-    elementos.loginStatus.textContent = "Equipe: admin/123456 ou organizador/123456. Participante: e-mail/código de inscrição.";
+    elementos.loginStatus.textContent = "Equipe: admin/123456. Organizador: e-mail/senha cadastrados. Participante: e-mail/codigo de inscricao.";
 }
 
 function mostrarHome() {
@@ -722,7 +722,7 @@ function renderizarTabelaInscricoes() {
         elementos.inscricoesTabela.innerHTML = `<tr><td colspan="6" class="text-center py-4">Nenhuma inscricao realizada.</td></tr>`;
         return;
     }
-    elementos.inscricoesTabela.innerHTML = inscricoes.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td><td class="text-end">${perfilAtual === "Administrador" ? renderizarAcoesInscricao(inscricao) : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
+    elementos.inscricoesTabela.innerHTML = inscricoes.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td><td class="text-end">${perfilAtual === "Administrador" || perfilAtual === "Organizador" ? renderizarAcoesInscricao(inscricao) : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
 }
 
 async function salvarInscricao(evento) {
@@ -759,7 +759,9 @@ function renderizarAcoesInscricao(inscricao) {
     if (inscricao.status !== "Inscrito") {
         acoes.push(`<button class="btn btn-outline-secondary btn-sm" onclick="atualizarStatusInscricao(${inscricao.id}, 'Inscrito')">Reabrir</button>`);
     }
-    acoes.push(`<button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoInscricao(${inscricao.id})">Excluir</button>`);
+    if (perfilAtual === "Administrador") {
+        acoes.push(`<button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoInscricao(${inscricao.id})">Excluir</button>`);
+    }
     return acoes.join(" ");
 }
 

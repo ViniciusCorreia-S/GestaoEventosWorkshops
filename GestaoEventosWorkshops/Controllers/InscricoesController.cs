@@ -21,8 +21,11 @@ public class InscricoesController : ControllerBase
     [Authorize(Policy = "EquipeEventos")]
     public async Task<IActionResult> Get()
     {
-        if (User.IsInRole("Organizador") && TryGetOrganizadorId(out var organizadorId))
+        if (User.IsInRole("Organizador"))
         {
+            if (!TryGetOrganizadorId(out var organizadorId))
+                return Forbid();
+
             return Ok(new
             {
                 sucesso = true,
@@ -80,12 +83,25 @@ public class InscricoesController : ControllerBase
     }
 
     [HttpPatch("{id:int}/status")]
-    [Authorize(Policy = "SomenteAdministrador")]
+    [Authorize(Policy = "EquipeEventos")]
     public async Task<IActionResult> AtualizarStatus(int id, [FromBody] InscricaoStatusUpdateDto dto)
     {
         try
         {
-            var inscricao = await _service.AtualizarStatusAsync(id, dto);
+            InscricaoResponseDto? inscricao;
+
+            if (User.IsInRole("Organizador"))
+            {
+                if (!TryGetOrganizadorId(out var organizadorId))
+                    return Forbid();
+
+                inscricao = await _service.AtualizarStatusPorOrganizadorAsync(id, organizadorId, dto);
+            }
+            else
+            {
+                inscricao = await _service.AtualizarStatusAsync(id, dto);
+            }
+
             return inscricao is null
                 ? NotFound(new { sucesso = false, mensagem = "Inscricao nao encontrada. Atualize a lista e tente novamente." })
                 : Ok(new
@@ -98,6 +114,10 @@ public class InscricoesController : ControllerBase
         catch (InvalidOperationException ex)
         {
             return BadRequest(new { sucesso = false, mensagem = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { sucesso = false, mensagem = ex.Message });
         }
     }
 

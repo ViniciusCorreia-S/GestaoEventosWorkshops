@@ -90,7 +90,6 @@ public class AuthController : ControllerBase
         return (usuario, senha) switch
         {
             ("admin", "123456") => "Administrador",
-            ("organizador", "123456") => "Organizador",
             _ => null
         };
     }
