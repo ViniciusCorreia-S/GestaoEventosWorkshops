@@ -58,11 +58,23 @@ body {
     margin-top: 1rem;
 }
 
+#senha {
+    width: 150px;
+    padding-right: 20px;
+}
+
+.olhoSenha {
+    cursor: pointer;
+    left: 160px;
+    position: absolute;
+    width: 20px;
+}
+
 .logo-badge {
     letter-spacing: .02em;
 }
 
-.container img {
+nav .container img {
     max-width: 110px;
     height: auto;
     cursor: pointer;
