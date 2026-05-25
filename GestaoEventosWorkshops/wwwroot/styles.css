@@ -39,7 +39,7 @@ body {
     position: relative;
 }
 
-.login-card img {
+.card-body img {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -496,5 +496,12 @@ body {
     .dashboard-hero {
         flex-direction: column;
     }
-}
 
+	.navbar img {
+		max-width: 90px;
+	}
+
+	.card-body img {
+		max-width: 90px;
+	}
+}

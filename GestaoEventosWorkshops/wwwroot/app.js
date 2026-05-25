@@ -95,7 +95,8 @@ const elementos = {
     participanteCards: document.getElementById("participanteCards"),
     participanteHistoricoHoras: document.getElementById("participanteHistoricoHoras"),
     participanteHistoricoTabela: document.getElementById("participanteHistoricoTabela"),
-    mensagemParticipante: document.getElementById("mensagemParticipante")
+    mensagemParticipante: document.getElementById("mensagemParticipante"),
+    nomedapagina: document.getElementById("nomedapagina")
 };
 
 const modalExclusao = new bootstrap.Modal(elementos.modalExclusao);
@@ -350,6 +351,7 @@ async function carregarDadosHome() {
 function configurarPermissoesInterface() {
     const admin = perfilAtual === "Administrador";
     elementos.abaOrganizadoresItem.classList.toggle("d-none", !admin);
+	elementos.nomedapagina.textContent = admin ? "Área do Administrador" : "Área do Organizador";
     [elementos.eventoForm, elementos.workshopForm, elementos.inscricaoForm].forEach(form => {
         form.closest(".col-12").classList.toggle("d-none", !admin);
     });
@@ -643,6 +645,7 @@ function renderizarAreaParticipante() {
     const nome = participanteAtual?.nome || "participante";
     elementos.participanteHeaderNome.textContent = nome;
     elementos.participanteTitulo.textContent = `Olá, ${nome}`;
+	elementos.nomedapagina.textContent = `Área do participante`;
 
     const proximosEventos = new Set();
     inscricoes.forEach(inscricao => {

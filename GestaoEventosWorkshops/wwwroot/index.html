@@ -73,10 +73,10 @@
     <!--====================================================== PAGINA HOME ===============================================================-->
     <section class="d-none" id="homePage">
         <!--====================================================== HEADER ===============================================================-->
-        <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+        <nav class="dr navbar-expand-lg bg-body-tertiary border-bottom">
 			<div class="container">
-				<img src="Img/Logo-EventHub.png" />
-				<span class="navbar-brand fw-semibold">Gestão de Eventos</span>
+				<img src="Img/Logo-EventHub.png" draggable="false"/>
+				<span class="navbar-brand fw-semibold" id="nomedapagina"></span>
 				<div class="d-flex align-items-center gap-2">
 					<span class="badge text-bg-primary logo-badge">EventHub</span>
 					<button class="btn btn-outline-secondary btn-sm" id="btnLogout" type="button">Sair</button>
@@ -426,6 +426,7 @@
 									<thead>
 										<tr>
 											<th>Participante</th>
+											<th>Evento</th>
 											<th>Workshop</th>
 											<th>Data</th>
 											<th>Status</th>
@@ -492,7 +493,7 @@
 			<div class="container">
 				<img src="Img/Logo-EventHub.png" />
 				<div>
-					<span class="navbar-brand fw-semibold d-block">Área do participante</span>
+					<span class="navbar-brand fw-semibold d-block" id="nomedapagina"></span>
 					<small class="text-muted" id="participanteHeaderNome">Bem-vindo</small>
 				</div>
 				<div class="d-flex align-items-center gap-2">
