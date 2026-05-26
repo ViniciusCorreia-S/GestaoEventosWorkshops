@@ -98,7 +98,8 @@ const elementos = {
     participanteHistoricoHoras: document.getElementById("participanteHistoricoHoras"),
     participanteHistoricoTabela: document.getElementById("participanteHistoricoTabela"),
     mensagemParticipante: document.getElementById("mensagemParticipante"),
-    nomedapagina: document.getElementById("nomedapagina")
+    nomedapagina: document.getElementById("nomedapagina"),
+    olhoSenha: document.getElementById('olhoSenha'),
 };
 
 const modalExclusao = new bootstrap.Modal(elementos.modalExclusao);
@@ -651,9 +652,9 @@ function filtrarInscricoesParticipante() {
 
 function renderizarAreaParticipante() {
     const nome = participanteAtual?.nome || "participante";
+
     elementos.participanteHeaderNome.textContent = nome;
     elementos.participanteTitulo.textContent = `Olá, ${nome}`;
-	elementos.nomedapagina.textContent = `Área do participante`;
 
     const proximosEventos = new Set();
     inscricoes.forEach(inscricao => {
@@ -937,6 +938,9 @@ function abrirAbaPorSeletor(seletor) {
 }
 
 elementos.loginForm.addEventListener("submit", login);
+elementos.olhoSenha.addEventListener('mousedown', function () { elementos.senha.type = 'text'; });
+elementos.olhoSenha.addEventListener('mouseup', function () { elementos.senha.type = 'password'; });
+elementos.olhoSenha.addEventListener('mousemove', function () { elementos.senha.type = 'password'; });
 elementos.cadastroContaForm.addEventListener("submit", cadastrarContaParticipante);
 elementos.btnLogout.addEventListener("click", logout);
 elementos.btnLogoutParticipante.addEventListener("click", logout);
@@ -964,4 +968,3 @@ if (token) {
 } else {
     mostrarTelaLogin();
 }
-
