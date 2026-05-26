@@ -26,7 +26,6 @@ const elementos = {
     btnLogin: document.getElementById("btnLogin"),
     btnLogout: document.getElementById("btnLogout"),
     btnLogoutParticipante: document.getElementById("btnLogoutParticipante"),
-    loginStatus: document.getElementById("loginStatus"),
     mensagem: document.getElementById("mensagem"),
     form: document.getElementById("participanteForm"),
     participanteId: document.getElementById("participanteId"),
@@ -243,7 +242,6 @@ function mostrarTelaLogin() {
     elementos.loginPage.classList.remove("d-none");
     elementos.homePage.classList.add("d-none");
     elementos.participantPage.classList.add("d-none");
-    elementos.loginStatus.textContent = "Equipe: admin/123456. Organizador: e-mail/senha cadastrados. Participante: e-mail/codigo de inscricao.";
 }
 
 function mostrarHome() {

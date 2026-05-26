@@ -24,7 +24,11 @@
 								<img src="Img/Logo-EventHub.png" draggable="false"/>
 							</a>	
 							<h1 class="h3 mb-2">Gestão de Eventos</h1>
-							<p class="text-muted mb-4">Entre para acessar participantes, eventos, workshops e inscrições.</p>
+
+
+							<!--<p class="text-muted mb-4">Entre para acessar participantes, eventos, workshops e inscrições.</p>-->
+
+
 							<!--============================================= FORMULÁRIO DE LOGIN ================================================-->
 							<form id="loginForm" class="vstack gap-3">
 								<div>
@@ -33,7 +37,10 @@
 								</div>
 								<div>
 									<label class="form-label" for="senha">Senha</label>
-									<input class="form-control" id="senha" type="password" placeholder="Digite a senha" autocomplete="current-password">
+									<div class="campo-senha">
+										<input class="form-control" id="senha" type="password" placeholder="Digite a senha" autocomplete="current-password">
+										<img src="Img/eye.svg" id="olhoSenha" class="olhoSenha">
+									</div>
 								</div>
 								<button class="btn btn-primary w-100" id="btnLogin" type="submit">Entrar</button>
 							</form>
