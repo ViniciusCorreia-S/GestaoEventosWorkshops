@@ -12,7 +12,6 @@
 	</style>
 </head>
 <body>
-    <!--====================================================== PAGINA DE LOGIN ===============================================================-->
     <section class="login-page" id="loginPage">
         <div class="container">
             <div class="row justify-content-center">
@@ -25,11 +24,6 @@
 							</a>	
 							<h1 class="h3 mb-2">Gestão de Eventos</h1>
 
-
-							<!--<p class="text-muted mb-4">Entre para acessar participantes, eventos, workshops e inscrições.</p>-->
-
-
-							<!--============================================= FORMULÁRIO DE LOGIN ================================================-->
 							<form id="loginForm" class="vstack gap-3">
 								<div>
 									<label class="form-label" for="usuario">Usuário</label>
@@ -79,9 +73,7 @@
         </div>
     </section>
 
-    <!--====================================================== PAGINA HOME ===============================================================-->
     <section class="d-none" id="homePage">
-        <!--====================================================== HEADER ===============================================================-->
         <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
 			<div class="container">
 				<img src="Img/Logo-EventHub.png" draggable="false"/>
@@ -93,9 +85,7 @@
 			</div>
         </nav>
 
-        <!--====================================================== MAIN ===============================================================-->
 		<main class="container py-4">
-			<!--====================================================== TITULO E SUBTITULO ===============================================================-->
 			<div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
 				<div>
 					<h1 class="h4 mb-1">Home</h1>
@@ -104,7 +94,6 @@
 				<button class="btn btn-outline-primary btn-sm align-self-md-start" id="btnAtualizar" type="button">Atualizar dados</button>
 			</div>
 
-			<!--====================================================== ABAS DE NAVEGAÇÃO ===============================================================-->
 			<ul class="nav nav-tabs mb-4" id="abasSistema" role="tablist">
 				<li class="nav-item" role="presentation">
 					<button class="nav-link active" id="abaDashboardBotao" data-bs-toggle="tab" data-bs-target="#abaDashboard" type="button" role="tab" aria-controls="abaDashboard" aria-selected="true">Dashboard</button>
@@ -126,7 +115,6 @@
 				</li>
 			</ul>
 
-			<!--====================================================== CARDS DE MÉTRICAS ===============================================================-->
 			<div class="tab-content">
 				<section class="tab-pane fade show active" id="abaDashboard" role="tabpanel" aria-labelledby="abaDashboardBotao" tabindex="0">
 					<div class="row g-3 mb-4">
@@ -160,7 +148,6 @@
 						</div>
 					</div>
 
-					<!--====================================================== GRÁFICOS E LISTAS ===============================================================-->
 					<div class="row g-4">
 						<div class="col-12 col-xl-7">
 							<div class="card dashboard-panel">
@@ -196,14 +183,12 @@
 					</div>
 				</section>
 
-				<!--====================================================== ABA DE ALUNO ===============================================================-->
 				<section class="tab-pane fade" id="abaParticipantes" role="tabpanel" aria-labelledby="abaParticipantesBotao" tabindex="0">
 					<div class="row g-4">
 						<div class="col-12 col-xl-4">
 							<div class="card">
 								<div class="card-header fw-semibold">Cadastro de participante</div>
 								<div class="card-body">
-									<!--=======================FORMULÁRIO DE CADASTRO DE ALUNO=====================-->
 									<form id="participanteForm" class="vstack gap-3">
 										<input type="hidden" id="participanteId">
 										<div>
@@ -235,7 +220,6 @@
 							</div>
 						</div>
 
-						<!--========================TABELA DE ALUNOS CADASTRADOS=======================-->
 						<div class="col-12 col-xl-8">
 							<div class="d-flex justify-content-between align-items-center mb-3">
 								<h2 class="h5 mb-0">Participantes cadastrados</h2>
@@ -277,14 +261,12 @@
 					</div>
 				</section>
 
-				<!--================================================ ABA DE CURSOS ========================================-->
 				<section class="tab-pane fade" id="abaEventos" role="tabpanel" aria-labelledby="abaEventosBotao" tabindex="0">
 					<div class="row g-4">
 						<div class="col-12 col-xl-4">
 							<div class="card">
 								<div class="card-header fw-semibold">Cadastro de evento</div>
 								<div class="card-body">
-									<!--============== FORMULÁRIO DE CURSOS ================-->
 									<form id="eventoForm" class="vstack gap-3">
 										<input type="hidden" id="eventoCadastroId">
 										<div>
@@ -322,7 +304,6 @@
 							</div>
 						</div>
 
-						<!--============================================== TABELA DE CURSOS ================================================-->
 						<div class="col-12 col-xl-8">
 							<div class="d-flex justify-content-between align-items-center mb-3">
 								<h2 class="h5 mb-0">Eventos cadastrados</h2>
@@ -344,14 +325,12 @@
 					</div>
 				</section>
 
-				<!--================================================ABA DE DISCIPLINAS========================================-->
 				<section class="tab-pane fade" id="abaWorkshops" role="tabpanel" aria-labelledby="abaWorkshopsBotao" tabindex="0">
 					<div class="row g-4">
 						<div class="col-12 col-xl-4">
 							<div class="card">
 								<div class="card-header fw-semibold">Cadastro de workshop</div>
 								<div class="card-body">
-									<!--==============FORMULÁRIO DE DISCIPLINA================-->
 									<form id="workshopForm" class="vstack gap-3">
 										<input type="hidden" id="workshopId">
 										<div>
@@ -379,7 +358,6 @@
 							</div>
 						</div>
 
-						<!--============================================== TABELA DE DISCIPLINA ================================================-->
 						<div class="col-12 col-xl-8">
 							<div class="d-flex justify-content-between align-items-center mb-3">
 								<h2 class="h5 mb-0">Workshops cadastrados</h2>
@@ -402,14 +380,12 @@
 					</div>
 				</section>
 
-				<!--========================================= ABA DE INSCRIÇÕES ======================================-->
 				<section class="tab-pane fade" id="abaInscricoes" role="tabpanel" aria-labelledby="abaInscricoesBotao" tabindex="0">
 					<div class="row g-4">
 						<div class="col-12 col-xl-4">
 							<div class="card">
 								<div class="card-header fw-semibold">Realizar inscrição</div>
 								<div class="card-body">
-									<!--==============================FORMULÁRIO DE INSCRIÇÃO==========================-->
 									<form id="inscricaoForm" class="vstack gap-3">
 										<div>
 											<label class="form-label" for="inscricaoParticipanteId">Participante</label>
@@ -425,7 +401,6 @@
 							</div>
 						</div>
 
-						<!--================================== TABELA DE INSCRICOES ===============================-->
 						<div class="col-12 col-xl-8">
 							<div class="d-flex justify-content-between align-items-center mb-3">
 								<h2 class="h5 mb-0">Inscrições realizadas</h2>
@@ -496,7 +471,6 @@
 		</main>
     </section>
 
-	<!--====================================================== PAGINA DO PARTICIPANTE ===============================================================-->
 	<section class="d-none" id="participantPage">
 		<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
 			<div class="container">
@@ -606,7 +580,6 @@
 		</div>
 	</footer>
 
-    <!--====================================== MODAL DE CONFIRMAÇÃO DE EXCLUSÃO ===================-->
     <div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="modalExclusaoTitulo" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -626,7 +599,6 @@
         </div>
     </div>
 
-    <!--====================================== MODAL DE ERRO DE LOGIN ===================-->
     <div class="modal fade" id="modalLoginErro" tabindex="-1" aria-labelledby="modalLoginErroTitulo" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
@@ -672,9 +644,7 @@
         </div>
     </div>
 
-    <!--=================== JS DO BOOTSTRAP ===================-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <!--=================== JS DO SISTEMA ===================-->
     <script src="./app.js"></script>
 </body>
 </html>
