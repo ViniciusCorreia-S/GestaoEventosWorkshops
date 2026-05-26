@@ -108,14 +108,16 @@ nav .container img {
 }
 
 .btn-success {
-    background-color: var(--color-success);
-    border-color: var(--color-success);
+    background-color: var(--color-secondary);
+    border-color: var(--color-secondary);
+    color: var(--color-action-text);
 }
 
 .btn-success:hover,
 .btn-success:focus {
-    background-color: #276f4d;
-    border-color: #276f4d;
+    background-color: var(--color-secondary-dark);
+    border-color: var(--color-secondary-dark);
+    color: var(--color-action-text);
 }
 
 .btn-danger {

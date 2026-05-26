@@ -267,7 +267,7 @@ async function login(evento) {
             body: JSON.stringify({
                 usuario: elementos.usuario.value,
                 senha: elementos.senha.value,
-                aceiteTermosLgpd: elementos.loginAceiteLgpd.checked
+                aceiteTermosLgpd: elementos.loginAceiteLgpd?.checked === true
             })
         });
         token = resultado.token;
@@ -316,7 +316,7 @@ async function cadastrarContaParticipante(evento) {
             email: elementos.contaEmail.value,
             codigoInscricao: elementos.contaCodigo.value,
             dataNascimento: elementos.contaDataNascimento.value,
-            aceiteTermosLgpd: elementos.contaAceiteLgpd.checked
+            aceiteTermosLgpd: elementos.contaAceiteLgpd?.checked === true
         };
         await requisicao(`${apiBase}/participantes`, {
             method: "POST",
@@ -325,7 +325,7 @@ async function cadastrarContaParticipante(evento) {
 
         elementos.usuario.value = elementos.contaEmail.value;
         elementos.senha.value = elementos.contaCodigo.value;
-        elementos.loginAceiteLgpd.checked = true;
+        if (elementos.loginAceiteLgpd) elementos.loginAceiteLgpd.checked = true;
         await login(new Event("submit"));
     } catch (erro) {
         elementos.loginErroMensagem.textContent = erro.message || "Nao foi possivel cadastrar sua conta.";
