@@ -58,16 +58,19 @@ body {
     margin-top: 1rem;
 }
 
-#senha {
-    width: 150px;
-    padding-right: 20px;
+.campo-senha {
+	position: relative;
+	display: flex;
 }
 
 .olhoSenha {
-    cursor: pointer;
-    left: 160px;
     position: absolute;
-    width: 20px;
+    right: 12px;
+    top: 90%;
+    transform: translateY(-50%);
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
 }
 
 .logo-badge {
