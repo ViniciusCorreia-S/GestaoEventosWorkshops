@@ -19,8 +19,10 @@ const elementos = {
     contaEmail: document.getElementById("contaEmail"),
     contaCodigo: document.getElementById("contaCodigo"),
     contaDataNascimento: document.getElementById("contaDataNascimento"),
+    contaAceiteLgpd: document.getElementById("contaAceiteLgpd"),
     usuario: document.getElementById("usuario"),
     senha: document.getElementById("senha"),
+    loginAceiteLgpd: document.getElementById("loginAceiteLgpd"),
     btnLogin: document.getElementById("btnLogin"),
     btnLogout: document.getElementById("btnLogout"),
     btnLogoutParticipante: document.getElementById("btnLogoutParticipante"),
@@ -261,7 +263,11 @@ async function login(evento) {
     try {
         const resultado = await requisicao(`${apiBase}/auth/login`, {
             method: "POST",
-            body: JSON.stringify({ usuario: elementos.usuario.value, senha: elementos.senha.value })
+            body: JSON.stringify({
+                usuario: elementos.usuario.value,
+                senha: elementos.senha.value,
+                aceiteTermosLgpd: elementos.loginAceiteLgpd.checked
+            })
         });
         token = resultado.token;
         perfilAtual = resultado.perfil || "";
@@ -308,7 +314,8 @@ async function cadastrarContaParticipante(evento) {
             nome: elementos.contaNome.value,
             email: elementos.contaEmail.value,
             codigoInscricao: elementos.contaCodigo.value,
-            dataNascimento: elementos.contaDataNascimento.value
+            dataNascimento: elementos.contaDataNascimento.value,
+            aceiteTermosLgpd: elementos.contaAceiteLgpd.checked
         };
         await requisicao(`${apiBase}/participantes`, {
             method: "POST",
@@ -317,6 +324,7 @@ async function cadastrarContaParticipante(evento) {
 
         elementos.usuario.value = elementos.contaEmail.value;
         elementos.senha.value = elementos.contaCodigo.value;
+        elementos.loginAceiteLgpd.checked = true;
         await login(new Event("submit"));
     } catch (erro) {
         elementos.loginErroMensagem.textContent = erro.message || "Nao foi possivel cadastrar sua conta.";

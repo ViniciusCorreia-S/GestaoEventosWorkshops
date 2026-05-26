@@ -6,6 +6,8 @@ namespace GestaoEventosWorkshops.Services;
 
 public class ParticipanteService : IParticipanteService
 {
+    private const string VersaoAtualTermosLgpd = "2026-05-26";
+
     private readonly IParticipanteRepository _participanteRepository;
 
     public ParticipanteService(IParticipanteRepository participanteRepository)
@@ -37,8 +39,25 @@ public class ParticipanteService : IParticipanteService
         return participante is null ? null : MapearParticipante(participante);
     }
 
+    public async Task<ParticipanteResponseDto?> RegistrarAceiteTermosLgpdAsync(int id)
+    {
+        var participante = await _participanteRepository.BuscarPorIdAsync(id);
+        if (participante is null)
+            return null;
+
+        participante.AceiteTermosLgpd = true;
+        participante.DataAceiteTermosLgpd = DateTime.UtcNow;
+        participante.VersaoTermosLgpd = VersaoAtualTermosLgpd;
+
+        await _participanteRepository.AtualizarAsync(participante);
+        return MapearParticipante(participante);
+    }
+
     public async Task<ParticipanteResponseDto> CriarAsync(ParticipanteCreateDto dto)
     {
+        if (!dto.AceiteTermosLgpd)
+            throw new InvalidOperationException("E necessario aceitar os Termos de Uso e a Politica de Privacidade para criar a conta.");
+
         if (dto.DataNascimento > DateOnly.FromDateTime(DateTime.Today))
             throw new InvalidOperationException("A data de nascimento não pode ser futura. Informe uma data igual ou anterior ao dia de hoje.");
 
@@ -54,7 +73,10 @@ public class ParticipanteService : IParticipanteService
             Email = dto.Email.Trim().ToLowerInvariant(),
             CodigoInscricao = dto.CodigoInscricao.Trim(),
             DataNascimento = dto.DataNascimento,
-            Ativo = true
+            Ativo = true,
+            AceiteTermosLgpd = true,
+            DataAceiteTermosLgpd = DateTime.UtcNow,
+            VersaoTermosLgpd = VersaoAtualTermosLgpd
         };
 
         await _participanteRepository.AdicionarAsync(participante);
@@ -101,7 +123,10 @@ public class ParticipanteService : IParticipanteService
             Email = participante.Email,
             CodigoInscricao = participante.CodigoInscricao,
             DataNascimento = participante.DataNascimento,
-            Ativo = participante.Ativo
+            Ativo = participante.Ativo,
+            AceiteTermosLgpd = participante.AceiteTermosLgpd,
+            DataAceiteTermosLgpd = participante.DataAceiteTermosLgpd,
+            VersaoTermosLgpd = participante.VersaoTermosLgpd
         };
     }
 }

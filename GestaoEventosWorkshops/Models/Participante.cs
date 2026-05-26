@@ -19,5 +19,12 @@ public class Participante
 
     public bool Ativo { get; set; } = true;
 
+    public bool AceiteTermosLgpd { get; set; }
+
+    public DateTime? DataAceiteTermosLgpd { get; set; }
+
+    [MaxLength(20)]
+    public string? VersaoTermosLgpd { get; set; }
+
     public ICollection<InscricaoWorkshop> Inscricoes { get; set; } = [];
 }

@@ -35,6 +35,10 @@
 									<label class="form-label" for="senha">Senha</label>
 									<input class="form-control" id="senha" type="password" placeholder="Digite a senha" autocomplete="current-password">
 								</div>
+								<div class="form-check">
+									<input class="form-check-input" id="loginAceiteLgpd" type="checkbox" required>
+									<label class="form-check-label" for="loginAceiteLgpd">Li e aceito os <button class="btn btn-link p-0 align-baseline" type="button" data-bs-toggle="modal" data-bs-target="#modalTermosUso">Termos de Uso e Politica de Privacidade</button>.</label>
+								</div>
 								<button class="btn btn-primary w-100" id="btnLogin" type="submit">Entrar</button>
 							</form>
 
@@ -57,6 +61,10 @@
 									<div>
 										<label class="form-label" for="contaDataNascimento">Data de nascimento</label>
 										<input class="form-control" id="contaDataNascimento" type="date" required>
+									</div>
+									<div class="form-check">
+										<input class="form-check-input" id="contaAceiteLgpd" type="checkbox" required>
+										<label class="form-check-label" for="contaAceiteLgpd">Autorizo o tratamento dos meus dados para cadastro, inscricoes, comunicacoes do evento e emissao de historico/certificado, conforme os <button class="btn btn-link p-0 align-baseline" type="button" data-bs-toggle="modal" data-bs-target="#modalTermosUso">Termos de Uso</button>.</label>
 									</div>
 									<button class="btn btn-success w-100" type="submit">Cadastrar e entrar</button>
 								</form>
@@ -627,6 +635,34 @@
                 </div>
                 <div class="modal-body">
                     <p class="mb-0" id="loginErroMensagem"></p>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Entendi</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="modalTermosUso" tabindex="-1" aria-labelledby="modalTermosUsoTitulo" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title h5" id="modalTermosUsoTitulo">Termos de Uso e Politica de Privacidade</h2>
+                    <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Fechar"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Versao:</strong> 2026-05-26</p>
+                    <p>O EventHub utiliza somente os dados necessarios para identificar participantes, gerenciar inscricoes em eventos e workshops, registrar presenca, emitir historico/certificados e proteger o acesso ao sistema.</p>
+                    <h3 class="h6">Dados tratados</h3>
+                    <p>Nome, e-mail, codigo de inscricao, data de nascimento, status de participante, inscricoes, eventos, workshops e registros de acesso/autenticacao.</p>
+                    <h3 class="h6">Finalidade e acesso</h3>
+                    <p>Os dados sao usados para execucao do servico de eventos. Administradores acessam cadastros gerais; organizadores acessam dados relacionados aos eventos sob sua responsabilidade; participantes acessam sua propria area.</p>
+                    <h3 class="h6">Direitos do titular</h3>
+                    <p>Voce pode solicitar confirmacao de tratamento, acesso, correcao, revisao, eliminacao quando aplicavel, informacoes sobre compartilhamento e revogacao do consentimento pelos canais oficiais do controlador do evento.</p>
+                    <h3 class="h6">Seguranca e retencao</h3>
+                    <p>O sistema usa autenticacao para restringir acesso. Os dados sao mantidos pelo periodo necessario para gestao do evento, obrigacoes legais, historico de participacao e exercicio regular de direitos.</p>
+                    <h3 class="h6">Consentimento</h3>
+                    <p>Ao continuar, voce declara que leu estes termos e autoriza o tratamento dos dados para as finalidades informadas. A negativa impede a criacao ou o acesso da conta no sistema.</p>
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-primary" type="button" data-bs-dismiss="modal">Entendi</button>

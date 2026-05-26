@@ -8,4 +8,7 @@ public class ParticipanteResponseDto
     public string CodigoInscricao { get; set; } = string.Empty;
     public DateOnly DataNascimento { get; set; }
     public bool Ativo { get; set; }
+    public bool AceiteTermosLgpd { get; set; }
+    public DateTime? DataAceiteTermosLgpd { get; set; }
+    public string? VersaoTermosLgpd { get; set; }
 }

@@ -28,6 +28,15 @@ public class AuthController : ControllerBase
     [HttpPost("login")]
     public async Task<IActionResult> Login([FromBody] LoginDto login)
     {
+        if (!login.AceiteTermosLgpd)
+        {
+            return BadRequest(new
+            {
+                sucesso = false,
+                mensagem = "Para entrar, aceite os Termos de Uso e a Politica de Privacidade."
+            });
+        }
+
         var perfil = ValidarUsuario(login.Usuario, login.Senha);
         if (perfil is not null)
         {
@@ -70,6 +79,8 @@ public class AuthController : ControllerBase
                 mensagem = "Usuario ou senha invalidos. Para participante, use seu e-mail e codigo de inscricao."
             });
         }
+
+        participante = await _participanteService.RegistrarAceiteTermosLgpdAsync(participante.Id) ?? participante;
 
         var token = GerarToken(participante.Email, "Participante", participante.Id.ToString());
 
