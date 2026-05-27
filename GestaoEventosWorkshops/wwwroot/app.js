@@ -213,6 +213,47 @@ function formatarDataSimples(valor) {
     return `${dia}/${mes}/${ano}`;
 }
 
+function normalizarTextoPdf(valor) {
+    return String(valor ?? "")
+        .normalize("NFD")
+        .replace(/[\u0300-\u036f]/g, "")
+        .replace(/[^\x20-\x7E]/g, " ");
+}
+
+function escaparTextoPdf(valor) {
+    return normalizarTextoPdf(valor)
+        .replace(/\\/g, "\\\\")
+        .replace(/\(/g, "\\(")
+        .replace(/\)/g, "\\)");
+}
+
+function quebrarTextoPdf(valor, limite = 62) {
+    const palavras = normalizarTextoPdf(valor).split(/\s+/).filter(Boolean);
+    const linhas = [];
+    let linha = "";
+
+    palavras.forEach(palavra => {
+        const tentativa = linha ? `${linha} ${palavra}` : palavra;
+        if (tentativa.length > limite && linha) {
+            linhas.push(linha);
+            linha = palavra;
+        } else {
+            linha = tentativa;
+        }
+    });
+
+    if (linha) linhas.push(linha);
+    return linhas.length ? linhas : [""];
+}
+
+function slugArquivo(valor) {
+    return normalizarTextoPdf(valor).toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "") || "ingresso";
+}
+
+function textoPdf(x, y, texto, tamanho = 12, fonte = "F1", cor = "0 0 0") {
+    return `${cor} rg BT /${fonte} ${tamanho} Tf ${x} ${y} Td (${escaparTextoPdf(texto)}) Tj ET`;
+}
+
 function definirCarregando(botao, carregando, texto = "Carregando...") {
     if (!botao.dataset.textoOriginal) botao.dataset.textoOriginal = botao.textContent;
     botao.disabled = carregando;
@@ -229,7 +270,9 @@ function mostrarMensagem(texto, tipo = "success") {
         info: { titulo: "Aviso", simbolo: "i" }
     };
     const alerta = configuracoes[tipo] || configuracoes.info;
-    alvo.innerHTML = `<div class="app-alert-icon"><span>${alerta.simbolo}</span></div><div class="app-alert-content"><strong>${alerta.titulo}</strong><span>${escaparHtml(texto)}</span></div><button class="app-alert-close" type="button" aria-label="Fechar alerta">X</button>`;
+    alvo.innerHTML = `<div class="app-alert-icon"><span>${alerta.simbolo}</span></div><div class="app-alert-content">
+                      <strong>${alerta.titulo}</strong><span>${escaparHtml(texto)}</span></div>
+                      <button class="app-alert-close" type="button" aria-label="Fechar alerta">X</button>`;
     alvo.querySelector("button").addEventListener("click", esconderMensagem);
 }
 function esconderMensagem() {
@@ -414,7 +457,11 @@ function renderizarTabelaEventos() {
         elementos.eventosTabela.innerHTML = `<tr><td colspan="5" class="text-center py-4">Nenhum evento cadastrado.</td></tr>`;
         return;
     }
-    elementos.eventosTabela.innerHTML = eventos.map(evento => `<tr><td>${escaparHtml(evento.codigo)}</td><td>${escaparHtml(evento.nome)}<div class="small text-muted">${escaparHtml(evento.organizadorNome || "Sem responsável")}</div></td><td>${escaparHtml(evento.local)}</td><td>${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}</td><td class="text-end">${perfilAtual === "Administrador" ? `<button class="btn btn-outline-secondary btn-sm" onclick="editarEvento(${evento.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoEvento(${evento.id})">Excluir</button>` : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
+    elementos.eventosTabela.innerHTML = eventos.map(evento => `<tr><td>${escaparHtml(evento.codigo)}</td>
+                                                                <td>${escaparHtml(evento.nome)}<div class="small text-muted">${escaparHtml(evento.organizadorNome || "Sem responsável")}</div></td>
+                                                                <td>${escaparHtml(evento.local)}</td><td>${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}</td>
+                                                                <td class="text-end">${perfilAtual === "Administrador" ? `<button class="btn btn-outline-secondary btn-sm" onclick="editarEvento(${evento.id})">Editar</button>
+                                                                <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoEvento(${evento.id})">Excluir</button>` : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
 }
 
 function editarEvento(id) {
@@ -458,7 +505,10 @@ function renderizarTabelaOrganizadores() {
         return;
     }
 
-    elementos.organizadoresTabela.innerHTML = organizadores.map(organizador => `<tr><td>${escaparHtml(organizador.nome)}</td><td>${escaparHtml(organizador.email)}</td><td><span class="status-dot ${organizador.ativo ? "active" : "inactive"}"></span> ${organizador.ativo ? "Ativo" : "Inativo"}</td></tr>`).join("");
+    elementos.organizadoresTabela.innerHTML = organizadores.map(organizador => `<tr><td>${escaparHtml(organizador.nome)}</td>
+                                                                                <td>${escaparHtml(organizador.email)}</td>
+                                                                                <td><span class="status-dot ${organizador.ativo ? "active" : "inactive"}"></span> ${organizador.ativo ? "Ativo" : "Inativo"}</td>
+                                                                                </tr>`).join("");
 }
 
 async function salvarOrganizador(evento) {
@@ -508,7 +558,11 @@ function renderizarTabelaParticipantes() {
         elementos.tabela.innerHTML = `<tr><td colspan="4" class="text-center py-4">Nenhum participante encontrado.</td></tr>`;
         return;
     }
-    elementos.tabela.innerHTML = dados.map(participante => `<tr><td>${escaparHtml(participante.codigoInscricao)}</td><td>${escaparHtml(participante.nome)}<div class="small text-muted">${escaparHtml(participante.email)}</div></td><td><span class="status-dot ${participante.ativo ? "active" : "inactive"}"></span> ${participante.ativo ? "Ativo" : "Inativo"}</td><td class="text-end"><button class="btn btn-outline-secondary btn-sm" onclick="editarParticipante(${participante.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoParticipante(${participante.id})">Excluir</button></td></tr>`).join("");
+    elementos.tabela.innerHTML = dados.map(participante => `<tr><td>${escaparHtml(participante.codigoInscricao)}</td>
+                                                            <td>${escaparHtml(participante.nome)}<div class="small text-muted">${escaparHtml(participante.email)}</div></td>
+                                                            <td><span class="status-dot ${participante.ativo ? "active" : "inactive"}"></span> ${participante.ativo ? "Ativo" : "Inativo"}</td>
+                                                            <td class="text-end"><button class="btn btn-outline-secondary btn-sm" onclick="editarParticipante(${participante.id})">Editar</button> 
+                                                            <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoParticipante(${participante.id})">Excluir</button></td></tr>`).join("");
 }
 
 function editarParticipante(id) {
@@ -558,7 +612,12 @@ function renderizarTabelaWorkshops() {
         elementos.workshopsTabela.innerHTML = `<tr><td colspan="5" class="text-center py-4">Nenhum workshop cadastrado.</td></tr>`;
         return;
     }
-    elementos.workshopsTabela.innerHTML = workshops.map(workshop => `<tr><td>${escaparHtml(workshop.codigo)}</td><td>${escaparHtml(workshop.nome)}</td><td>${escaparHtml(workshop.eventoNome)}</td><td>${workshop.cargaHoraria}h</td><td class="text-end">${perfilAtual === "Administrador" ? `<button class="btn btn-outline-secondary btn-sm" onclick="editarWorkshop(${workshop.id})">Editar</button> <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoWorkshop(${workshop.id})">Excluir</button>` : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
+    elementos.workshopsTabela.innerHTML = workshops.map(workshop => `<tr><td>${escaparHtml(workshop.codigo)}</td>
+                                                                    <td>${escaparHtml(workshop.nome)}</td>
+                                                                    <td>${escaparHtml(workshop.eventoNome)}</td>
+                                                                    <td>${workshop.cargaHoraria}h</td><td class="text-end">${perfilAtual === "Administrador" ?
+            `<button class="btn btn-outline-secondary btn-sm" onclick="editarWorkshop(${workshop.id})">Editar</button> 
+             <button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoWorkshop(${workshop.id})">Excluir</button>` : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
 }
 
 function editarWorkshop(id) {
@@ -593,11 +652,15 @@ async function salvarWorkshop(evento) {
 
 function preencherSelectParticipantesInscricao() {
     const ativos = participantes.filter(participante => participante.ativo);
-    elementos.inscricaoParticipanteId.innerHTML = `<option value="" disabled selected>Selecione um participante</option>${ativos.map(participante => `<option value="${participante.id}">${escaparHtml(participante.nome)} - ${escaparHtml(participante.codigoInscricao)}</option>`).join("")}`;
+    elementos.inscricaoParticipanteId.innerHTML = `<option value="" disabled selected>Selecione um participante</option>
+                                                    ${ativos.map(participante => `<option value="${participante.id}">
+                                                    ${escaparHtml(participante.nome)} - ${escaparHtml(participante.codigoInscricao)}</option>`).join("")}`;
 }
 
 function preencherSelectWorkshops() {
-    elementos.inscricaoWorkshopId.innerHTML = `<option value="" disabled selected>Selecione um workshop</option>${workshops.map(workshop => `<option value="${workshop.id}">${escaparHtml(workshop.eventoNome)} | ${escaparHtml(workshop.codigo)} - ${escaparHtml(workshop.nome)}</option>`).join("")}`;
+    elementos.inscricaoWorkshopId.innerHTML = `<option value="" disabled selected>Selecione um workshop</option>
+                                                ${workshops.map(workshop => `<option value="${workshop.id}">
+                                                ${escaparHtml(workshop.eventoNome)} | ${escaparHtml(workshop.codigo)} - ${escaparHtml(workshop.nome)}</option>`).join("")}`;
 }
 
 async function carregarInscricoes() {
@@ -690,31 +753,116 @@ function renderizarAreaParticipante() {
 function renderizarCardsParticipante() {
     const dados = filtrarInscricoesParticipante();
     if (!dados.length) {
-        elementos.participanteCards.innerHTML = `<div class="col-12"><div class="card"><div class="card-body text-center text-muted py-4">Nenhum evento ou workshop encontrado.</div></div></div>`;
+        elementos.participanteCards.innerHTML = `<div class="col-12">
+                                                <div class="card"><div class="card-body text-center text-muted py-4">Nenhum evento ou workshop encontrado.</div>
+                                                </div></div>`;
         return;
     }
-
     elementos.participanteCards.innerHTML = dados.map(inscricao => {
         const evento = obterEventoDaInscricao(inscricao);
         const workshop = obterWorkshopDaInscricao(inscricao);
         const status = statusParticipante(inscricao);
         const confirmado = status === "Confirmado";
-        return `<div class="col-12 col-lg-6"><article class="participant-event-card ${confirmado ? "is-confirmed" : ""}"><div class="d-flex justify-content-between gap-3 mb-2"><span class="badge ${confirmado ? "text-bg-primary" : "text-bg-secondary"}">${escaparHtml(status)}</span><small>${cargaHorariaInscricao(inscricao)}h</small></div><h2 class="h5 mb-1">${escaparHtml(inscricao.eventoNome)}</h2><p class="mb-2">${escaparHtml(inscricao.workshopNome)}</p><div class="participant-card-meta"><span>${escaparHtml(evento?.local || "Local a confirmar")}</span><span>${evento ? `${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}` : formatarData(inscricao.dataInscricao)}</span><span>${escaparHtml(workshop?.codigo || "Workshop")}</span></div>${confirmado ? `<div class="d-flex flex-wrap gap-2 mt-3"><button class="btn btn-primary btn-sm" type="button" onclick="verIngressoParticipante(${inscricao.id})">Ver ingresso</button><button class="btn btn-outline-primary btn-sm" type="button" onclick="adicionarAgendaParticipante(${inscricao.id})">Adicionar à agenda</button></div>` : ""}</article></div>`;
+        return `<div class="col-12 col-lg-6">
+        <article class="participant-event-card ${confirmado ? "is-confirmed" : ""}">
+        <div class="d-flex justify-content-between gap-3 mb-2">
+        <span class="badge ${confirmado ? "text-bg-primary" : "text-bg-secondary"}">${escaparHtml(status)}</span>
+        <small>${cargaHorariaInscricao(inscricao)}h</small>
+        </div>
+        <h2 class="h5 mb-1">${escaparHtml(inscricao.eventoNome)}</h2>
+        <p class="mb-2">${escaparHtml(inscricao.workshopNome)}</p>
+        <div class="participant-card-meta">
+        <span>${escaparHtml(evento?.local || "Local a confirmar")}</span>
+        <span>${evento ? `${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}` : formatarData(inscricao.dataInscricao)}</span>
+        <span>${escaparHtml(workshop?.codigo || "Workshop")}</span>
+        </div>${confirmado ? `<div class="d-flex flex-wrap gap-2 mt-3">
+        <button class="btn btn-primary btn-sm" type="button" onclick="baixarIngressoParticipante(${inscricao.id})">Baixar ingresso</button>
+        <button class="btn btn-outline-primary btn-sm" type="button" onclick="adicionarAgendaParticipante(${inscricao.id})">Adicionar à agenda</button></div>` : ""}
+        </article></div>`;
     }).join("");
 }
 
 function renderizarHistoricoParticipante() {
     const historico = inscricoes.filter(inscricaoHistoricoParticipante);
     elementos.participanteHistoricoTabela.innerHTML = historico.length
-        ? historico.map(inscricao => `<tr><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${renderizarStatusInscricao(statusParticipante(inscricao))}</td><td>${cargaHorariaInscricao(inscricao)}h</td></tr>`).join("")
+        ? historico.map(inscricao => `<tr><td>${escaparHtml(inscricao.eventoNome)}</td>
+                                        <td>${escaparHtml(inscricao.workshopNome)}</td>
+                                        <td>${renderizarStatusInscricao(statusParticipante(inscricao))}</td>
+                                        <td>${cargaHorariaInscricao(inscricao)}h</td></tr>`).join("")
         : `<tr><td colspan="4" class="text-center py-4">Nenhuma hora de capacitação acumulada ainda.</td></tr>`;
 }
 
-function verIngressoParticipante(id) {
+function baixarIngressoParticipante(id) {
     const inscricao = inscricoes.find(item => item.id === id);
     if (!inscricao) return;
     const evento = obterEventoDaInscricao(inscricao);
-    mostrarMensagem(`Ingresso confirmado: ${inscricao.eventoNome} - ${inscricao.workshopNome}${evento ? ` em ${formatarDataSimples(evento.dataInicio)}` : ""}.`, "info");
+    const workshop = obterWorkshopDaInscricao(inscricao);
+    const participanteNome = participanteAtual?.nome || inscricao.participanteNome || "Participante";
+    const participanteCodigo = participanteAtual?.codigoInscricao || inscricao.codigoInscricao || `INS-${inscricao.id}`;
+    const periodo = evento ? `${formatarDataSimples(evento.dataInicio)} a ${formatarDataSimples(evento.dataFim)}` : formatarData(inscricao.dataInscricao);
+    const local = evento?.local || "Local a confirmar";
+    const codigoWorkshop = workshop?.codigo || "Workshop";
+    const cargaHoraria = `${cargaHorariaInscricao(inscricao)}h`;
+    const linhasEvento = quebrarTextoPdf(inscricao.eventoNome, 46);
+    const linhasWorkshop = quebrarTextoPdf(inscricao.workshopNome, 54);
+    const linhasParticipante = quebrarTextoPdf(participanteNome, 54);
+    const conteudo = [
+        "q 0.08 0.25 0.46 rg 0 758 595 84 re f Q",
+        "q 0.93 0.97 1 rg 38 66 519 642 re f Q",
+        "q 0.08 0.25 0.46 RG 2 w 38 66 519 642 re S Q",
+        textoPdf(54, 800, "Ingresso confirmado", 24, "F2", "1 1 1"),
+        textoPdf(54, 775, "Gestao de Eventos e Workshops", 11, "F1", "1 1 1"),
+        textoPdf(54, 690, "Evento", 11, "F2", "0.08 0.25 0.46"),
+        ...linhasEvento.slice(0, 2).map((linha, indice) => textoPdf(54, 666 - (indice * 18), linha, 16, "F2")),
+        textoPdf(54, 610, "Workshop", 11, "F2", "0.08 0.25 0.46"),
+        ...linhasWorkshop.slice(0, 2).map((linha, indice) => textoPdf(54, 586 - (indice * 17), linha, 14, "F1")),
+        textoPdf(54, 522, "Participante", 11, "F2", "0.08 0.25 0.46"),
+        ...linhasParticipante.slice(0, 2).map((linha, indice) => textoPdf(54, 498 - (indice * 17), linha, 14, "F1")),
+        textoPdf(54, 438, "Codigo da inscricao", 11, "F2", "0.08 0.25 0.46"),
+        textoPdf(54, 414, participanteCodigo, 14, "F1"),
+        textoPdf(314, 438, "Status", 11, "F2", "0.08 0.25 0.46"),
+        textoPdf(314, 414, statusParticipante(inscricao), 14, "F1"),
+        textoPdf(54, 354, "Periodo", 11, "F2", "0.08 0.25 0.46"),
+        textoPdf(54, 330, periodo, 14, "F1"),
+        textoPdf(314, 354, "Carga horaria", 11, "F2", "0.08 0.25 0.46"),
+        textoPdf(314, 330, cargaHoraria, 14, "F1"),
+        textoPdf(54, 270, "Local", 11, "F2", "0.08 0.25 0.46"),
+        ...quebrarTextoPdf(local, 62).slice(0, 2).map((linha, indice) => textoPdf(54, 246 - (indice * 17), linha, 14, "F1")),
+        textoPdf(54, 186, "Codigo do workshop", 11, "F2", "0.08 0.25 0.46"),
+        textoPdf(54, 162, codigoWorkshop, 14, "F1"),
+        textoPdf(54, 102, `Emitido em ${new Date().toLocaleDateString("pt-BR")}`, 10, "F1", "0.35 0.35 0.35")
+    ].join("\n");
+    const objetos = [
+        "<< /Type /Catalog /Pages 2 0 R >>",
+        "<< /Type /Pages /Kids [3 0 R] /Count 1 >>",
+        "<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 5 0 R /F2 6 0 R >> >> /Contents 4 0 R >>",
+        `<< /Length ${conteudo.length} >>\nstream\n${conteudo}\nendstream`,
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>",
+        "<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>"
+    ];
+    let pdf = "%PDF-1.4\n";
+    const posicoes = [0];
+    objetos.forEach((objeto, indice) => {
+        posicoes.push(pdf.length);
+        pdf += `${indice + 1} 0 obj\n${objeto}\nendobj\n`;
+    });
+    const inicioXref = pdf.length;
+    pdf += `xref\n0 ${objetos.length + 1}\n0000000000 65535 f \n`;
+    posicoes.slice(1).forEach(posicao => {
+        pdf += `${String(posicao).padStart(10, "0")} 00000 n \n`;
+    });
+    pdf += `trailer\n<< /Size ${objetos.length + 1} /Root 1 0 R >>\nstartxref\n${inicioXref}\n%%EOF`;
+
+    const link = document.createElement("a");
+    const arquivo = new Blob([pdf], { type: "application/pdf" });
+    const url = URL.createObjectURL(arquivo);
+    link.href = url;
+    link.download = `${slugArquivo(`ingresso-${inscricao.eventoNome}-${inscricao.id}`)}.pdf`;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    mostrarMensagem("Ingresso baixado em PDF com sucesso.");
 }
 
 function adicionarAgendaParticipante(id) {
@@ -746,7 +894,11 @@ function renderizarTabelaInscricoes() {
         elementos.inscricoesTabela.innerHTML = `<tr><td colspan="6" class="text-center py-4">Nenhuma inscricao realizada.</td></tr>`;
         return;
     }
-    elementos.inscricoesTabela.innerHTML = inscricoes.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td><td class="text-end">${perfilAtual === "Administrador" || perfilAtual === "Organizador" ? renderizarAcoesInscricao(inscricao) : `<span class="text-muted">Somente leitura</span>`}</td></tr>`).join("");
+    elementos.inscricoesTabela.innerHTML = inscricoes.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td>
+                                                                        <td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td>
+                                                                        <td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td>
+                                                                        <td class="text-end">${perfilAtual === "Administrador" || perfilAtual === "Organizador" ? renderizarAcoesInscricao(inscricao) : `<span class="text-muted">Somente leitura</span>`}</td>
+                                                                        </tr>`).join("");
 }
 
 async function salvarInscricao(evento) {
@@ -859,7 +1011,10 @@ function renderizarParticipantesPorEvento() {
     elementos.dashParticipantesPorEvento.innerHTML = eventos.map(evento => {
         const total = contarInscricoesPorEvento(evento.id);
         const largura = Math.round((total / maior) * 100);
-        return `<div class="course-progress"><div class="d-flex justify-content-between gap-3"><span>${escaparHtml(evento.nome)}</span><strong>${total} participante${total === 1 ? "" : "s"}</strong></div><div class="progress"><div class="progress-bar" style="width: ${largura}%"></div></div></div>`;
+        return `<div class="course-progress">
+                <div class="d-flex justify-content-between gap-3">
+                <span>${escaparHtml(evento.nome)}</span><strong>${total} participante${total === 1 ? "" : "s"}</strong></div>
+                <div class="progress"><div class="progress-bar" style="width: ${largura}%"></div></div></div>`;
     }).join("");
 }
 
@@ -876,13 +1031,16 @@ function renderizarResumoRelatorios(participantesAtivos, cargaHorariaTotal) {
         ["Maior carga horária", workshopMaiorCarga ? `${workshopMaiorCarga.nome} (${workshopMaiorCarga.cargaHoraria}h)` : "Sem workshops"],
         ["Carga horária total", `${cargaHorariaTotal}h`]
     ];
-    elementos.dashResumoRelatorios.innerHTML = itens.map(([rotulo, valor]) => `<div class="list-group-item report-item"><span>${escaparHtml(rotulo)}</span><strong>${escaparHtml(valor)}</strong></div>`).join("");
+    elementos.dashResumoRelatorios.innerHTML = itens.map(([rotulo, valor]) => `<div class="list-group-item report-item"><span>${escaparHtml(rotulo)}</span><strong>${escaparHtml(valor)}</strong>
+                                                                                </div>`).join("");
 }
 
 function renderizarUltimasInscricoes() {
     const ultimas = inscricoes.slice().sort((a, b) => new Date(b.dataInscricao) - new Date(a.dataInscricao)).slice(0, 5);
     elementos.dashUltimasInscricoes.innerHTML = ultimas.length
-        ? ultimas.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td><td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td><td>${renderizarStatusInscricao(inscricao.status)}</td></tr>`).join("")
+        ? ultimas.map(inscricao => `<tr><td>${escaparHtml(inscricao.participanteNome)}</td><td>${escaparHtml(inscricao.eventoNome)}</td>
+                                    <td>${escaparHtml(inscricao.workshopNome)}</td><td>${formatarData(inscricao.dataInscricao)}</td>
+                                    <td>${renderizarStatusInscricao(inscricao.status)}</td></tr>`).join("")
         : `<tr><td colspan="5" class="text-center py-4">Nenhuma inscricao realizada.</td></tr>`;
 }
 
