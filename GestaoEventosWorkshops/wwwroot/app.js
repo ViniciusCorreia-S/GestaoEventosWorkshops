@@ -626,13 +626,14 @@ async function salvarEvento(evento) {
 
 function renderizarTabelaOrganizadores() {
     if (!organizadores.length) {
-        elementos.organizadoresTabela.innerHTML = `<tr><td colspan="3" class="text-center py-4">Nenhum organizador cadastrado.</td></tr>`;
+        elementos.organizadoresTabela.innerHTML = `<tr><td colspan="4" class="text-center py-4">Nenhum organizador cadastrado.</td></tr>`;
         return;
     }
 
     elementos.organizadoresTabela.innerHTML = organizadores.map(organizador => `<tr><td>${escaparHtml(organizador.nome)}</td>
                                                                                 <td>${escaparHtml(organizador.email)}</td>
                                                                                 <td><span class="status-dot ${organizador.ativo ? "active" : "inactive"}"></span> ${organizador.ativo ? "Ativo" : "Inativo"}</td>
+                                                                                <td class="text-end"><button class="btn btn-outline-danger btn-sm" onclick="abrirExclusaoOrganizador(${organizador.id})">Excluir</button></td>
                                                                                 </tr>`).join("");
 }
 
@@ -1226,9 +1227,17 @@ function abrirExclusaoInscricao(id) {
     modalExclusao.show();
 }
 
+function abrirExclusaoOrganizador(id) {
+    const organizador = organizadores.find(item => item.id === id);
+    exclusaoAtual = { tipo: "organizador", id };
+    elementos.exclusaoTexto.textContent = "Deseja excluir este organizador?";
+    elementos.registroExclusaoNome.textContent = `${organizador.nome} - ${organizador.email}`;
+    modalExclusao.show();
+}
+
 async function confirmarExclusao() {
     if (!exclusaoAtual) return;
-    const rotas = { participante: "participantes", evento: "eventos", workshop: "workshops", inscricao: "inscricoes" };
+    const rotas = { participante: "participantes", evento: "eventos", workshop: "workshops", inscricao: "inscricoes", organizador: "organizadores" };
     try {
         await requisicao(`${apiBase}/${rotas[exclusaoAtual.tipo]}/${exclusaoAtual.id}`, { method: "DELETE" });
         mostrarMensagem("Registro excluído com sucesso.");

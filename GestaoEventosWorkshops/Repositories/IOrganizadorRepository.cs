@@ -9,4 +9,5 @@ public interface IOrganizadorRepository
     Task<Organizador?> BuscarPorCredenciaisAsync(string email, string senha);
     Task<bool> ExisteEmailAsync(string email, int? ignorarOrganizadorId = null);
     Task AdicionarAsync(Organizador organizador);
+    Task RemoverAsync(Organizador organizador);
 }

@@ -43,6 +43,16 @@ public class OrganizadorService : IOrganizadorService
         return MapearOrganizador(organizador);
     }
 
+    public async Task<bool> RemoverAsync(int id)
+    {
+        var organizador = await _repository.BuscarPorIdAsync(id);
+        if (organizador is null)
+            return false;
+
+        await _repository.RemoverAsync(organizador);
+        return true;
+    }
+
     private static OrganizadorResponseDto MapearOrganizador(Organizador organizador)
     {
         return new OrganizadorResponseDto

@@ -45,4 +45,13 @@ public class OrganizadoresController : ControllerBase
             return BadRequest(new { sucesso = false, mensagem = ex.Message });
         }
     }
+
+    [HttpDelete("{id:int}")]
+    public async Task<IActionResult> Delete(int id)
+    {
+        var removido = await _service.RemoverAsync(id);
+        return removido
+            ? Ok(new { sucesso = true, mensagem = "Organizador removido com sucesso." })
+            : NotFound(new { sucesso = false, mensagem = "Organizador não encontrado. Atualize a lista e tente novamente." });
+    }
 }

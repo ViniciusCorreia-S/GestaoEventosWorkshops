@@ -44,4 +44,10 @@ public class OrganizadorRepository : IOrganizadorRepository
         await _context.Organizadores.AddAsync(organizador);
         await _context.SaveChangesAsync();
     }
+
+    public async Task RemoverAsync(Organizador organizador)
+    {
+        _context.Organizadores.Remove(organizador);
+        await _context.SaveChangesAsync();
+    }
 }
