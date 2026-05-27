@@ -84,6 +84,7 @@ const elementos = {
     organizadorSenha: document.getElementById("organizadorSenha"),
     organizadoresTabela: document.getElementById("organizadoresTabela"),
     modalLoginErro: document.getElementById("modalLoginErro"),
+    modalLoginErroTitulo: document.getElementById("modalLoginErroTitulo"),
     loginErroMensagem: document.getElementById("loginErroMensagem"),
     participanteHeaderNome: document.getElementById("participanteHeaderNome"),
     participanteTitulo: document.getElementById("participanteTitulo"),
@@ -275,10 +276,8 @@ async function login(evento) {
         localStorage.setItem("perfil", perfilAtual);
         if (participanteAtual) {
             localStorage.setItem("participanteAtual", JSON.stringify(participanteAtual));
-            await iniciarAreaParticipante();
         } else {
             localStorage.removeItem("participanteAtual");
-            await iniciarHome();
         }
     } catch (erro) {
         token = "";
@@ -287,10 +286,24 @@ async function login(evento) {
         localStorage.removeItem("token");
         localStorage.removeItem("perfil");
         localStorage.removeItem("participanteAtual");
+        elementos.modalLoginErroTitulo.textContent = "Login invalido";
         elementos.loginErroMensagem.textContent = erro.message || "Usuário ou senha inválidos.";
         modalLoginErro.show();
+        return;
     } finally {
         definirCarregando(elementos.btnLogin, false);
+    }
+
+    try {
+        if (participanteAtual) {
+            await iniciarAreaParticipante();
+        } else {
+            await iniciarHome();
+        }
+    } catch (erro) {
+        elementos.modalLoginErroTitulo.textContent = "Erro ao carregar dados";
+        elementos.loginErroMensagem.textContent = erro.message || "Nao foi possivel carregar os dados iniciais.";
+        modalLoginErro.show();
     }
 }
 
@@ -326,6 +339,7 @@ async function cadastrarContaParticipante(evento) {
         if (elementos.loginAceiteLgpd) elementos.loginAceiteLgpd.checked = true;
         await login(new Event("submit"));
     } catch (erro) {
+        elementos.modalLoginErroTitulo.textContent = "Erro no cadastro";
         elementos.loginErroMensagem.textContent = erro.message || "Nao foi possivel cadastrar sua conta.";
         modalLoginErro.show();
     } finally {
