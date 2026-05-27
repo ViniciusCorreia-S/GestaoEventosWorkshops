@@ -17,5 +17,7 @@ public class Organizador
 
     public bool Ativo { get; set; } = true;
 
+    public string? FotoPerfil { get; set; }
+
     public ICollection<Evento> Eventos { get; set; } = [];
 }

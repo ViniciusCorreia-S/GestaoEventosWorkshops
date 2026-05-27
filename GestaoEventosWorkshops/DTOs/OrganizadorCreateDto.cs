@@ -12,4 +12,6 @@ public class OrganizadorCreateDto
 
     [Required, MinLength(6), MaxLength(80)]
     public string Senha { get; set; } = string.Empty;
+
+    public string? FotoPerfil { get; set; }
 }

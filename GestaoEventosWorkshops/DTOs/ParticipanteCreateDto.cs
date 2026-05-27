@@ -16,5 +16,7 @@ public class ParticipanteCreateDto
     [Required]
     public DateOnly DataNascimento { get; set; }
 
+    public string? FotoPerfil { get; set; }
+
     public bool AceiteTermosLgpd { get; set; }
 }

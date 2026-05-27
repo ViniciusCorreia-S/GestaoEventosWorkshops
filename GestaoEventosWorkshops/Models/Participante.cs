@@ -19,6 +19,8 @@ public class Participante
 
     public bool Ativo { get; set; } = true;
 
+    public string? FotoPerfil { get; set; }
+
     public bool AceiteTermosLgpd { get; set; }
 
     public DateTime? DataAceiteTermosLgpd { get; set; }

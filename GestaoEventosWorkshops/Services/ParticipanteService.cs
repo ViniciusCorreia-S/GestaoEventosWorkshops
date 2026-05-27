@@ -74,6 +74,7 @@ public class ParticipanteService : IParticipanteService
             CodigoInscricao = dto.CodigoInscricao.Trim(),
             DataNascimento = dto.DataNascimento,
             Ativo = true,
+            FotoPerfil = NormalizarFotoPerfil(dto.FotoPerfil),
             AceiteTermosLgpd = true,
             DataAceiteTermosLgpd = DateTime.UtcNow,
             VersaoTermosLgpd = VersaoAtualTermosLgpd
@@ -124,9 +125,15 @@ public class ParticipanteService : IParticipanteService
             CodigoInscricao = participante.CodigoInscricao,
             DataNascimento = participante.DataNascimento,
             Ativo = participante.Ativo,
+            FotoPerfil = participante.FotoPerfil,
             AceiteTermosLgpd = participante.AceiteTermosLgpd,
             DataAceiteTermosLgpd = participante.DataAceiteTermosLgpd,
             VersaoTermosLgpd = participante.VersaoTermosLgpd
         };
+    }
+
+    private static string? NormalizarFotoPerfil(string? fotoPerfil)
+    {
+        return string.IsNullOrWhiteSpace(fotoPerfil) ? null : fotoPerfil.Trim();
     }
 }

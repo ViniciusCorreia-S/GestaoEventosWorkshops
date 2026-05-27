@@ -8,6 +8,7 @@ let organizadores = [];
 let exclusaoAtual = null;
 let perfilAtual = localStorage.getItem("perfil") || "";
 let participanteAtual = JSON.parse(localStorage.getItem("participanteAtual") || "null");
+let organizadorAtual = JSON.parse(localStorage.getItem("organizadorAtual") || "null");
 
 const elementos = {
     loginPage: document.getElementById("loginPage"),
@@ -19,6 +20,7 @@ const elementos = {
     contaEmail: document.getElementById("contaEmail"),
     contaCodigo: document.getElementById("contaCodigo"),
     contaDataNascimento: document.getElementById("contaDataNascimento"),
+    contaFotoPerfil: document.getElementById("contaFotoPerfil"),
     contaAceiteLgpd: document.getElementById("contaAceiteLgpd"),
     usuario: document.getElementById("usuario"),
     senha: document.getElementById("senha"),
@@ -33,7 +35,11 @@ const elementos = {
     email: document.getElementById("email"),
     inscricao: document.getElementById("inscricao"),
     dataNascimento: document.getElementById("dataNascimento"),
+    participanteFotoPerfilGrupo: document.getElementById("participanteFotoPerfilGrupo"),
+    participanteFotoPerfil: document.getElementById("participanteFotoPerfil"),
     ativo: document.getElementById("ativo"),
+    participanteAceiteLgpdGrupo: document.getElementById("participanteAceiteLgpdGrupo"),
+    participanteAceiteLgpd: document.getElementById("participanteAceiteLgpd"),
     tabela: document.getElementById("participantesTabela"),
     btnAtualizar: document.getElementById("btnAtualizar"),
     abaOrganizadoresItem: document.getElementById("abaOrganizadoresItem"),
@@ -82,11 +88,20 @@ const elementos = {
     organizadorNome: document.getElementById("organizadorNome"),
     organizadorEmail: document.getElementById("organizadorEmail"),
     organizadorSenha: document.getElementById("organizadorSenha"),
+    organizadorFotoPerfil: document.getElementById("organizadorFotoPerfil"),
     organizadoresTabela: document.getElementById("organizadoresTabela"),
     modalLoginErro: document.getElementById("modalLoginErro"),
     modalLoginErroTitulo: document.getElementById("modalLoginErroTitulo"),
     loginErroMensagem: document.getElementById("loginErroMensagem"),
     participanteHeaderNome: document.getElementById("participanteHeaderNome"),
+    participanteHeaderNomeResumo: document.getElementById("participanteHeaderNomeResumo"),
+    homeHeaderNome: document.getElementById("homeHeaderNome"),
+    participantePerfilAvatar: document.getElementById("participantePerfilAvatar"),
+    homePerfilAvatar: document.getElementById("homePerfilAvatar"),
+    modalPerfilAvatar: document.getElementById("modalPerfilAvatar"),
+    modalPerfilNome: document.getElementById("modalPerfilNome"),
+    modalPerfilPerfil: document.getElementById("modalPerfilPerfil"),
+    modalPerfilDados: document.getElementById("modalPerfilDados"),
     participanteTitulo: document.getElementById("participanteTitulo"),
     participanteMetricEventos: document.getElementById("participanteMetricEventos"),
     participanteMetricWorkshops: document.getElementById("participanteMetricWorkshops"),
@@ -254,6 +269,102 @@ function textoPdf(x, y, texto, tamanho = 12, fonte = "F1", cor = "0 0 0") {
     return `${cor} rg BT /${fonte} ${tamanho} Tf ${x} ${y} Td (${escaparTextoPdf(texto)}) Tj ET`;
 }
 
+function iniciaisUsuario(nome) {
+    const partes = String(nome || "Usuario").trim().split(/\s+/).filter(Boolean);
+    return (partes[0]?.[0] || "U") + (partes.length > 1 ? partes[partes.length - 1][0] : "");
+}
+
+function aplicarAvatar(elemento, usuario) {
+    if (!elemento) return;
+    elemento.textContent = "";
+    elemento.style.backgroundImage = "";
+    const foto = usuario?.fotoPerfil;
+    if (foto) {
+        elemento.style.backgroundImage = `url("${foto}")`;
+        elemento.setAttribute("aria-label", usuario?.nome || "Foto de perfil");
+        return;
+    }
+    elemento.textContent = iniciaisUsuario(usuario?.nome || usuario?.email || perfilAtual);
+}
+
+function obterUsuarioPerfilAtual() {
+    if (participanteAtual) {
+        return {
+            perfil: "Participante",
+            usuario: participanteAtual,
+            dados: [
+                ["Nome", participanteAtual.nome],
+                ["E-mail", participanteAtual.email],
+                ["Codigo de inscricao", participanteAtual.codigoInscricao],
+                ["Data de nascimento", formatarDataSimples(participanteAtual.dataNascimento)],
+                ["Status", participanteAtual.ativo ? "Ativo" : "Inativo"]
+            ]
+        };
+    }
+
+    if (organizadorAtual) {
+        return {
+            perfil: "Organizador",
+            usuario: organizadorAtual,
+            dados: [
+                ["Nome", organizadorAtual.nome],
+                ["E-mail", organizadorAtual.email],
+                ["Status", organizadorAtual.ativo ? "Ativo" : "Inativo"]
+            ]
+        };
+    }
+
+    return {
+        perfil: "Administrador",
+        usuario: { nome: "Administrador", email: elementos.usuario.value || "admin" },
+        dados: [
+            ["Usuario", elementos.usuario.value || "admin"],
+            ["Perfil", "Administrador"]
+        ]
+    };
+}
+
+function atualizarHeaderUsuario() {
+    aplicarAvatar(elementos.participantePerfilAvatar, participanteAtual);
+    aplicarAvatar(elementos.homePerfilAvatar, organizadorAtual || { nome: perfilAtual || "Administrador" });
+    if (elementos.participanteHeaderNomeResumo) {
+        elementos.participanteHeaderNomeResumo.textContent = participanteAtual?.nome || "Participante";
+    }
+    if (elementos.homeHeaderNome) {
+        elementos.homeHeaderNome.textContent = organizadorAtual?.nome || perfilAtual || "Administrador";
+    }
+}
+
+function abrirModalPerfilUsuario() {
+    const perfil = obterUsuarioPerfilAtual();
+    elementos.modalPerfilNome.textContent = perfil.usuario?.nome || perfil.usuario?.email || perfil.perfil;
+    elementos.modalPerfilPerfil.textContent = perfil.perfil;
+    aplicarAvatar(elementos.modalPerfilAvatar, perfil.usuario);
+    elementos.modalPerfilDados.innerHTML = perfil.dados.map(([rotulo, valor]) => `<div><dt>${escaparHtml(rotulo)}</dt><dd>${escaparHtml(valor || "-")}</dd></div>`).join("");
+}
+
+function lerImagemPerfil(input) {
+    const arquivo = input?.files?.[0];
+    if (!arquivo) return Promise.resolve(null);
+
+    if (!arquivo.type.startsWith("image/")) {
+        input.value = "";
+        return Promise.reject(new Error("Selecione um arquivo de imagem para a foto de perfil."));
+    }
+
+    if (arquivo.size > 512 * 1024) {
+        input.value = "";
+        return Promise.reject(new Error("A foto de perfil deve ter no maximo 512 KB."));
+    }
+
+    return new Promise((resolve, reject) => {
+        const leitor = new FileReader();
+        leitor.onload = () => resolve(leitor.result);
+        leitor.onerror = () => reject(new Error("Nao foi possivel ler a foto de perfil."));
+        leitor.readAsDataURL(arquivo);
+    });
+}
+
 function definirCarregando(botao, carregando, texto = "Carregando...") {
     if (!botao.dataset.textoOriginal) botao.dataset.textoOriginal = botao.textContent;
     botao.disabled = carregando;
@@ -292,12 +403,14 @@ function mostrarHome() {
     elementos.loginPage.classList.add("d-none");
     elementos.homePage.classList.remove("d-none");
     elementos.participantPage.classList.add("d-none");
+    atualizarHeaderUsuario();
 }
 
 function mostrarAreaParticipante() {
     elementos.loginPage.classList.add("d-none");
     elementos.homePage.classList.add("d-none");
     elementos.participantPage.classList.remove("d-none");
+    atualizarHeaderUsuario();
 }
 
 async function login(evento) {
@@ -315,6 +428,7 @@ async function login(evento) {
         token = resultado.token;
         perfilAtual = resultado.perfil || "";
         participanteAtual = resultado.participante || null;
+        organizadorAtual = resultado.organizador || null;
         localStorage.setItem("token", token);
         localStorage.setItem("perfil", perfilAtual);
         if (participanteAtual) {
@@ -322,13 +436,20 @@ async function login(evento) {
         } else {
             localStorage.removeItem("participanteAtual");
         }
+        if (organizadorAtual) {
+            localStorage.setItem("organizadorAtual", JSON.stringify(organizadorAtual));
+        } else {
+            localStorage.removeItem("organizadorAtual");
+        }
     } catch (erro) {
         token = "";
         perfilAtual = "";
         participanteAtual = null;
+        organizadorAtual = null;
         localStorage.removeItem("token");
         localStorage.removeItem("perfil");
         localStorage.removeItem("participanteAtual");
+        localStorage.removeItem("organizadorAtual");
         elementos.modalLoginErroTitulo.textContent = "Login invalido";
         elementos.loginErroMensagem.textContent = erro.message || "Usuário ou senha inválidos.";
         modalLoginErro.show();
@@ -354,9 +475,11 @@ function logout() {
     token = "";
     perfilAtual = "";
     participanteAtual = null;
+    organizadorAtual = null;
     localStorage.removeItem("token");
     localStorage.removeItem("perfil");
     localStorage.removeItem("participanteAtual");
+    localStorage.removeItem("organizadorAtual");
     mostrarTelaLogin();
 }
 
@@ -370,6 +493,7 @@ async function cadastrarContaParticipante(evento) {
             email: elementos.contaEmail.value,
             codigoInscricao: elementos.contaCodigo.value,
             dataNascimento: elementos.contaDataNascimento.value,
+            fotoPerfil: await lerImagemPerfil(elementos.contaFotoPerfil),
             aceiteTermosLgpd: elementos.contaAceiteLgpd?.checked === true
         };
         await requisicao(`${apiBase}/participantes`, {
@@ -416,6 +540,7 @@ function configurarPermissoesInterface() {
     const admin = perfilAtual === "Administrador";
     elementos.abaOrganizadoresItem.classList.toggle("d-none", !admin);
 	elementos.nomedapagina.textContent = admin ? "Área do Administrador" : "Área do Organizador";
+    atualizarHeaderUsuario();
     [elementos.eventoForm, elementos.workshopForm, elementos.inscricaoForm].forEach(form => {
         form.closest(".col-12").classList.toggle("d-none", !admin);
     });
@@ -513,15 +638,20 @@ function renderizarTabelaOrganizadores() {
 
 async function salvarOrganizador(evento) {
     evento.preventDefault();
-    const corpo = {
-        nome: elementos.organizadorNome.value,
-        email: elementos.organizadorEmail.value,
-        senha: elementos.organizadorSenha.value
-    };
-    await salvar(`${apiBase}/organizadores`, "POST", corpo, "Organizador cadastrado com sucesso.", async () => {
-        elementos.organizadorForm.reset();
-        await carregarOrganizadores();
-    }, elementos.organizadorForm);
+    try {
+        const corpo = {
+            nome: elementos.organizadorNome.value,
+            email: elementos.organizadorEmail.value,
+            senha: elementos.organizadorSenha.value,
+            fotoPerfil: await lerImagemPerfil(elementos.organizadorFotoPerfil)
+        };
+        await salvar(`${apiBase}/organizadores`, "POST", corpo, "Organizador cadastrado com sucesso.", async () => {
+            elementos.organizadorForm.reset();
+            await carregarOrganizadores();
+        }, elementos.organizadorForm);
+    } catch (erro) {
+        mostrarMensagem(erro.message, "danger");
+    }
 }
 
 async function carregarParticipantes() {
@@ -575,6 +705,7 @@ function editarParticipante(id) {
     elementos.inscricao.disabled = true;
     elementos.dataNascimento.value = participante.dataNascimento;
     elementos.ativo.checked = participante.ativo;
+    atualizarAceiteParticipanteVisibilidade();
 }
 
 function limparFormulario() {
@@ -582,22 +713,41 @@ function limparFormulario() {
     elementos.participanteId.value = "";
     elementos.inscricao.disabled = false;
     elementos.ativo.checked = true;
+    elementos.participanteFotoPerfil.value = "";
+    atualizarAceiteParticipanteVisibilidade();
+}
+
+function atualizarAceiteParticipanteVisibilidade() {
+    const editando = Boolean(elementos.participanteId.value);
+    elementos.participanteAceiteLgpdGrupo.classList.toggle("d-none", editando);
+    elementos.participanteFotoPerfilGrupo.classList.toggle("d-none", editando);
+    elementos.participanteAceiteLgpd.disabled = editando;
+    elementos.participanteAceiteLgpd.required = !editando;
+    if (editando) elementos.participanteAceiteLgpd.checked = true;
 }
 
 async function salvarParticipante(evento) {
     evento.preventDefault();
-    const id = elementos.participanteId.value;
-    const corpo = {
-        nome: elementos.nome.value,
-        email: elementos.email.value,
-        dataNascimento: elementos.dataNascimento.value,
-        ativo: elementos.ativo.checked
-    };
-    if (!id) corpo.codigoInscricao = elementos.inscricao.value;
-    await salvar(`${apiBase}/participantes${id ? `/${id}` : ""}`, id ? "PUT" : "POST", corpo, id ? "Participante atualizado com sucesso." : "Participante cadastrado com sucesso.", async () => {
-        limparFormulario();
-        await carregarParticipantes();
-    }, elementos.form);
+    try {
+        const id = elementos.participanteId.value;
+        const corpo = {
+            nome: elementos.nome.value,
+            email: elementos.email.value,
+            dataNascimento: elementos.dataNascimento.value,
+            ativo: elementos.ativo.checked
+        };
+        if (!id) {
+            corpo.codigoInscricao = elementos.inscricao.value;
+            corpo.fotoPerfil = await lerImagemPerfil(elementos.participanteFotoPerfil);
+            corpo.aceiteTermosLgpd = elementos.participanteAceiteLgpd.checked;
+        }
+        await salvar(`${apiBase}/participantes${id ? `/${id}` : ""}`, id ? "PUT" : "POST", corpo, id ? "Participante atualizado com sucesso." : "Participante cadastrado com sucesso.", async () => {
+            limparFormulario();
+            await carregarParticipantes();
+        }, elementos.form);
+    } catch (erro) {
+        mostrarMensagem(erro.message, "danger");
+    }
 }
 
 async function carregarWorkshops() {
@@ -1130,6 +1280,7 @@ elementos.participanteBusca.addEventListener("input", renderizarCardsParticipant
 elementos.participanteFiltroTipo.addEventListener("change", renderizarCardsParticipante);
 elementos.participanteFiltroStatus.addEventListener("change", renderizarCardsParticipante);
 elementos.btnConfirmarExclusao.addEventListener("click", confirmarExclusao);
+document.getElementById("modalPerfilUsuario").addEventListener("show.bs.modal", abrirModalPerfilUsuario);
 document.querySelectorAll("[data-ir-aba]").forEach(botao => botao.addEventListener("click", () => abrirAbaPorSeletor(botao.dataset.irAba)));
 
 if (token) {

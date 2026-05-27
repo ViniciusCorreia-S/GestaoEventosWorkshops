@@ -35,7 +35,8 @@ public class OrganizadorService : IOrganizadorService
             Nome = dto.Nome.Trim(),
             Email = dto.Email.Trim().ToLowerInvariant(),
             Senha = dto.Senha,
-            Ativo = true
+            Ativo = true,
+            FotoPerfil = NormalizarFotoPerfil(dto.FotoPerfil)
         };
 
         await _repository.AdicionarAsync(organizador);
@@ -49,7 +50,13 @@ public class OrganizadorService : IOrganizadorService
             Id = organizador.Id,
             Nome = organizador.Nome,
             Email = organizador.Email,
-            Ativo = organizador.Ativo
+            Ativo = organizador.Ativo,
+            FotoPerfil = organizador.FotoPerfil
         };
+    }
+
+    private static string? NormalizarFotoPerfil(string? fotoPerfil)
+    {
+        return string.IsNullOrWhiteSpace(fotoPerfil) ? null : fotoPerfil.Trim();
     }
 }

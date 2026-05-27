@@ -105,6 +105,79 @@ nav .container img {
     padding: 0.5rem 0.75rem;
 }
 
+.profile-trigger {
+    background: transparent;
+    border: 0;
+    border-radius: 50%;
+    display: inline-flex;
+    padding: 0;
+}
+
+.profile-trigger:focus-visible {
+    box-shadow: 0 0 0 0.2rem rgba(255, 140, 0, .35);
+    outline: 0;
+}
+
+.profile-avatar {
+    align-items: center;
+    background: var(--color-primary);
+    background-position: center;
+    background-size: cover;
+    border: 2px solid var(--color-secondary);
+    border-radius: 50%;
+    color: #fff;
+    display: inline-flex;
+    flex: 0 0 auto;
+    font-weight: 700;
+    height: 42px;
+    justify-content: center;
+    line-height: 1;
+    text-transform: uppercase;
+    width: 42px;
+}
+
+.profile-avatar-lg {
+    font-size: 1.45rem;
+    height: 76px;
+    width: 76px;
+}
+
+.profile-name {
+    color: var(--color-text);
+    font-size: .9rem;
+    font-weight: 600;
+    max-width: 160px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.profile-summary {
+    align-items: center;
+    display: flex;
+    gap: 1rem;
+}
+
+.profile-details {
+    display: grid;
+    gap: .65rem;
+}
+
+.profile-details div {
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: .65rem;
+}
+
+.profile-details dt {
+    color: var(--color-muted);
+    font-size: .82rem;
+    font-weight: 600;
+}
+
+.profile-details dd {
+    margin-bottom: 0;
+}
+
 .text-bg-primary,
 .btn-primary {
     background-color: var(--color-secondary) !important;
