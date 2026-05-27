@@ -14,16 +14,28 @@
     --color-action-text: #1E272E;
 }
 
+html {
+    min-height: 100%;
+}
+
 body {
     background: var(--color-page);
     color: var(--color-text);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
 }
 
 .login-page {
     align-items: center;
     display: flex;
-    min-height: calc(100vh - 67px);
+    flex: 1 0 auto;
     padding: 2rem 0;
+}
+
+#homePage,
+#participantPage {
+    flex: 1 0 auto;
 }
 
 .login-card {
@@ -474,6 +486,7 @@ nav .container img {
     border-top: 3px solid var(--color-secondary);
     color: rgba(255, 255, 255, .88);
     font-size: .9rem;
+    margin-top: auto;
     padding: 1rem 0;
 }
 
