@@ -18,5 +18,8 @@ public class Evento
     public DateOnly DataInicio { get; set; }
     public DateOnly DataFim { get; set; }
 
+    public int? OrganizadorId { get; set; }
+    public Organizador? Organizador { get; set; }
+
     public ICollection<Workshop> Workshops { get; set; } = [];
 }

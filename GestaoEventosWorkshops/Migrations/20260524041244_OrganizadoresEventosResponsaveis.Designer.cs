@@ -4,6 +4,7 @@ using GestaoEventosWorkshops.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace GestaoEventosWorkshops.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260524041244_OrganizadoresEventosResponsaveis")]
+    partial class OrganizadoresEventosResponsaveis
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -212,9 +215,6 @@ namespace GestaoEventosWorkshops.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<bool>("AceiteTermosLgpd")
-                        .HasColumnType("tinyint(1)");
-
                     b.Property<bool>("Ativo")
                         .HasColumnType("tinyint(1)");
 
@@ -222,9 +222,6 @@ namespace GestaoEventosWorkshops.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("varchar(20)");
-
-                    b.Property<DateTime?>("DataAceiteTermosLgpd")
-                        .HasColumnType("datetime(6)");
 
                     b.Property<DateOnly>("DataNascimento")
                         .HasColumnType("date");
@@ -238,10 +235,6 @@ namespace GestaoEventosWorkshops.Migrations
                         .IsRequired()
                         .HasMaxLength(120)
                         .HasColumnType("varchar(120)");
-
-                    b.Property<string>("VersaoTermosLgpd")
-                        .HasMaxLength(20)
-                        .HasColumnType("varchar(20)");
 
                     b.HasKey("Id");
 
@@ -257,50 +250,38 @@ namespace GestaoEventosWorkshops.Migrations
                         new
                         {
                             Id = 1,
-                            AceiteTermosLgpd = true,
                             Ativo = true,
                             CodigoInscricao = "EVT20260001",
-                            DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, 0, DateTimeKind.Utc),
                             DataNascimento = new DateOnly(2008, 3, 17),
                             Email = "viniciuscorreia@eventos.local",
-                            Nome = "Vinicius Correia",
-                            VersaoTermosLgpd = "2026-05-26"
+                            Nome = "Vinicius Correia"
                         },
                         new
                         {
                             Id = 2,
-                            AceiteTermosLgpd = true,
                             Ativo = true,
                             CodigoInscricao = "EVT20260002",
-                            DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, 0, DateTimeKind.Utc),
                             DataNascimento = new DateOnly(2002, 4, 12),
                             Email = "ana.souza@eventos.local",
-                            Nome = "Ana Souza",
-                            VersaoTermosLgpd = "2026-05-26"
+                            Nome = "Ana Souza"
                         },
                         new
                         {
                             Id = 3,
-                            AceiteTermosLgpd = true,
                             Ativo = true,
                             CodigoInscricao = "EVT20260003",
-                            DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, 0, DateTimeKind.Utc),
                             DataNascimento = new DateOnly(2004, 8, 25),
                             Email = "mariana.lima@eventos.local",
-                            Nome = "Mariana Lima",
-                            VersaoTermosLgpd = "2026-05-26"
+                            Nome = "Mariana Lima"
                         },
                         new
                         {
                             Id = 4,
-                            AceiteTermosLgpd = true,
                             Ativo = false,
                             CodigoInscricao = "EVT20260004",
-                            DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, 0, DateTimeKind.Utc),
                             DataNascimento = new DateOnly(2003, 11, 9),
                             Email = "carlos.pereira@eventos.local",
-                            Nome = "Carlos Pereira",
-                            VersaoTermosLgpd = "2026-05-26"
+                            Nome = "Carlos Pereira"
                         });
                 });
 

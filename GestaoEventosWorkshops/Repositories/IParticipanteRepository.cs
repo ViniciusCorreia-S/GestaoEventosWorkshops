@@ -5,6 +5,7 @@ namespace GestaoEventosWorkshops.Repositories;
 public interface IParticipanteRepository
 {
     Task<List<Participante>> ListarTodosAsync();
+    Task<List<Participante>> ListarPorOrganizadorAsync(int organizadorId);
     Task<Participante?> BuscarPorIdAsync(int id);
     Task<Participante?> BuscarPorCredenciaisAsync(string email, string codigoInscricao);
     Task<bool> ExisteEmailAsync(string email, int? ignorarParticipanteId = null);

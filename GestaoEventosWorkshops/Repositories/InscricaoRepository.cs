@@ -25,6 +25,17 @@ public class InscricaoRepository : IInscricaoRepository
             .ToListAsync();
     }
 
+    public async Task<List<InscricaoWorkshop>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        return await _context.InscricoesWorkshops
+            .Include(inscricao => inscricao.Participante)
+            .Include(inscricao => inscricao.Workshop)
+                .ThenInclude(workshop => workshop!.Evento)
+            .Where(inscricao => inscricao.Workshop!.Evento!.OrganizadorId == organizadorId)
+            .OrderByDescending(inscricao => inscricao.DataInscricao)
+            .ToListAsync();
+    }
+
     public async Task<List<InscricaoWorkshop>> ListarPorParticipanteAsync(int participanteId)
     {
         return await _context.InscricoesWorkshops

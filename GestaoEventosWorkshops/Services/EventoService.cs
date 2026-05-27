@@ -19,6 +19,12 @@ public class EventoService : IEventoService
         return eventos.Select(MapearEvento).ToList();
     }
 
+    public async Task<List<EventoResponseDto>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        var eventos = await _repository.ListarPorOrganizadorAsync(organizadorId);
+        return eventos.Select(MapearEvento).ToList();
+    }
+
     public async Task<EventoResponseDto?> BuscarPorIdAsync(int id)
     {
         var evento = await _repository.BuscarPorIdAsync(id);
@@ -29,6 +35,7 @@ public class EventoService : IEventoService
     {
         ValidarPeriodo(dto.DataInicio, dto.DataFim);
         var codigo = NormalizarCodigo(dto.Codigo);
+        await ValidarOrganizadorAsync(dto.OrganizadorId);
 
         if (await _repository.ExisteCodigoAsync(codigo))
             throw new InvalidOperationException("Já existe evento cadastrado com este código. Use um código diferente.");
@@ -39,7 +46,8 @@ public class EventoService : IEventoService
             Codigo = codigo,
             Local = dto.Local.Trim(),
             DataInicio = dto.DataInicio,
-            DataFim = dto.DataFim
+            DataFim = dto.DataFim,
+            OrganizadorId = dto.OrganizadorId
         };
 
         await _repository.AdicionarAsync(evento);
@@ -54,6 +62,7 @@ public class EventoService : IEventoService
 
         ValidarPeriodo(dto.DataInicio, dto.DataFim);
         var codigo = NormalizarCodigo(dto.Codigo);
+        await ValidarOrganizadorAsync(dto.OrganizadorId);
 
         if (await _repository.ExisteCodigoAsync(codigo, id))
             throw new InvalidOperationException("Já existe outro evento usando este código. Use um código diferente.");
@@ -63,6 +72,7 @@ public class EventoService : IEventoService
         evento.Local = dto.Local.Trim();
         evento.DataInicio = dto.DataInicio;
         evento.DataFim = dto.DataFim;
+        evento.OrganizadorId = dto.OrganizadorId;
 
         await _repository.AtualizarAsync(evento);
         return true;
@@ -92,6 +102,12 @@ public class EventoService : IEventoService
         return codigo.Trim().ToUpperInvariant();
     }
 
+    private async Task ValidarOrganizadorAsync(int? organizadorId)
+    {
+        if (organizadorId.HasValue && !await _repository.ExisteOrganizadorAsync(organizadorId.Value))
+            throw new InvalidOperationException("O organizador selecionado nao foi encontrado ou esta inativo.");
+    }
+
     private static EventoResponseDto MapearEvento(Evento evento)
     {
         return new EventoResponseDto
@@ -101,7 +117,9 @@ public class EventoService : IEventoService
             Codigo = evento.Codigo,
             Local = evento.Local,
             DataInicio = evento.DataInicio,
-            DataFim = evento.DataFim
+            DataFim = evento.DataFim,
+            OrganizadorId = evento.OrganizadorId,
+            OrganizadorNome = evento.Organizador?.Nome ?? string.Empty
         };
     }
 }

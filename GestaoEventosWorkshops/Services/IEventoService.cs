@@ -5,6 +5,7 @@ namespace GestaoEventosWorkshops.Services;
 public interface IEventoService
 {
     Task<List<EventoResponseDto>> ListarTodosAsync();
+    Task<List<EventoResponseDto>> ListarPorOrganizadorAsync(int organizadorId);
     Task<EventoResponseDto?> BuscarPorIdAsync(int id);
     Task<EventoResponseDto> CriarAsync(EventoCreateDto dto);
     Task<bool> AtualizarAsync(int id, EventoUpdateDto dto);

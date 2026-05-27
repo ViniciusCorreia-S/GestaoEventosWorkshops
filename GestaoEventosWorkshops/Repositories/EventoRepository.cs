@@ -15,18 +15,37 @@ public class EventoRepository : IEventoRepository
 
     public async Task<List<Evento>> ListarTodosAsync()
     {
-        return await _context.Eventos.OrderBy(evento => evento.DataInicio).ToListAsync();
+        return await _context.Eventos
+            .Include(evento => evento.Organizador)
+            .OrderBy(evento => evento.DataInicio)
+            .ToListAsync();
+    }
+
+    public async Task<List<Evento>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        return await _context.Eventos
+            .Include(evento => evento.Organizador)
+            .Where(evento => evento.OrganizadorId == organizadorId)
+            .OrderBy(evento => evento.DataInicio)
+            .ToListAsync();
     }
 
     public async Task<Evento?> BuscarPorIdAsync(int id)
     {
-        return await _context.Eventos.FindAsync(id);
+        return await _context.Eventos
+            .Include(evento => evento.Organizador)
+            .FirstOrDefaultAsync(evento => evento.Id == id);
     }
 
     public async Task<bool> ExisteCodigoAsync(string codigo, int? ignorarEventoId = null)
     {
         return await _context.Eventos.AnyAsync(evento =>
             evento.Codigo == codigo && (!ignorarEventoId.HasValue || evento.Id != ignorarEventoId));
+    }
+
+    public async Task<bool> ExisteOrganizadorAsync(int organizadorId)
+    {
+        return await _context.Organizadores.AnyAsync(organizador => organizador.Id == organizadorId && organizador.Ativo);
     }
 
     public async Task<bool> PossuiVinculosAsync(int eventoId)

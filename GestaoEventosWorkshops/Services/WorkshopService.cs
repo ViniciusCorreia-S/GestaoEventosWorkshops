@@ -21,6 +21,12 @@ public class WorkshopService : IWorkshopService
         return workshops.Select(MapearWorkshop).ToList();
     }
 
+    public async Task<List<WorkshopResponseDto>> ListarPorOrganizadorAsync(int organizadorId)
+    {
+        var workshops = await _workshopRepository.ListarPorOrganizadorAsync(organizadorId);
+        return workshops.Select(MapearWorkshop).ToList();
+    }
+
     public async Task<WorkshopResponseDto?> BuscarPorIdAsync(int id)
     {
         var workshop = await _workshopRepository.BuscarPorIdAsync(id);

@@ -9,5 +9,7 @@ public class LoginDto
 
     [Required]
     public string Senha { get; set; } = string.Empty;
+
+    public bool AceiteTermosLgpd { get; set; }
 }
 

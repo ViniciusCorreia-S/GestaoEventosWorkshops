@@ -9,6 +9,11 @@ using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+var port = Environment.GetEnvironmentVariable("PORT") ?? "8080";
+builder.WebHost.UseUrls($"http://*:{port}");
+
+builder.Services.AddHealthChecks();
+
 // Configuracao da string de conexao para MySQL, obtida do appsettings.json
 var connectionString = builder.Configuration.GetConnectionString("ConexaoPadrao")
 	?? throw new InvalidOperationException("ConnectionString ConexaoPadrao nao configurada.");
@@ -53,10 +58,12 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Registrando os repositÃ³rios e serviÃ§os para injeÃ§Ã£o de dependÃªncia
 builder.Services.AddScoped<IParticipanteRepository, ParticipanteRepository>();
+builder.Services.AddScoped<IOrganizadorRepository, OrganizadorRepository>();
 builder.Services.AddScoped<IEventoRepository, EventoRepository>();
 builder.Services.AddScoped<IWorkshopRepository, WorkshopRepository>();
 builder.Services.AddScoped<IInscricaoRepository, InscricaoRepository>();
 builder.Services.AddScoped<IParticipanteService, ParticipanteService>();
+builder.Services.AddScoped<IOrganizadorService, OrganizadorService>();
 builder.Services.AddScoped<IEventoService, EventoService>();
 builder.Services.AddScoped<IWorkshopService, WorkshopService>();
 builder.Services.AddScoped<IInscricaoService, InscricaoService>();
@@ -97,11 +104,16 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
+using (var scope = app.Services.CreateScope())
 {
-	app.UseSwagger();
-	app.UseSwaggerUI();
+	var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+	dbContext.Database.Migrate();
 }
+
+app.UseHealthChecks("/health");
+
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 

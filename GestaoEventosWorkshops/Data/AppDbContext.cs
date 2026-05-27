@@ -10,6 +10,7 @@ public class AppDbContext : DbContext
     }
 
     public DbSet<Participante> Participantes => Set<Participante>();
+    public DbSet<Organizador> Organizadores => Set<Organizador>();
     public DbSet<Evento> Eventos => Set<Evento>();
     public DbSet<Workshop> Workshops => Set<Workshop>();
     public DbSet<InscricaoWorkshop> InscricoesWorkshops => Set<InscricaoWorkshop>();
@@ -24,9 +25,19 @@ public class AppDbContext : DbContext
             .HasIndex(participante => participante.CodigoInscricao)
             .IsUnique();
 
+        modelBuilder.Entity<Organizador>()
+            .HasIndex(organizador => organizador.Email)
+            .IsUnique();
+
         modelBuilder.Entity<Evento>()
             .HasIndex(evento => evento.Codigo)
             .IsUnique();
+
+        modelBuilder.Entity<Evento>()
+            .HasOne(evento => evento.Organizador)
+            .WithMany(organizador => organizador.Eventos)
+            .HasForeignKey(evento => evento.OrganizadorId)
+            .OnDelete(DeleteBehavior.SetNull);
 
         modelBuilder.Entity<Workshop>()
             .HasIndex(workshop => workshop.Codigo)
@@ -36,8 +47,12 @@ public class AppDbContext : DbContext
             .HasIndex(inscricao => new { inscricao.ParticipanteId, inscricao.WorkshopId })
             .IsUnique();
 
+        modelBuilder.Entity<Organizador>().HasData(
+            new Organizador { Id = 1, Nome = "Organizador Tech", Email = "organizador@eventos.local", Senha = "123456", Ativo = true }
+        );
+
         modelBuilder.Entity<Evento>().HasData(
-            new Evento { Id = 1, Nome = "Tech Week 2026", Codigo = "TECH2026", Local = "Centro de Convencoes", DataInicio = new DateOnly(2026, 8, 10), DataFim = new DateOnly(2026, 8, 12) },
+            new Evento { Id = 1, Nome = "Tech Week 2026", Codigo = "TECH2026", Local = "Centro de Convencoes", DataInicio = new DateOnly(2026, 8, 10), DataFim = new DateOnly(2026, 8, 12), OrganizadorId = 1 },
             new Evento { Id = 2, Nome = "Semana de Inovacao", Codigo = "INOVA26", Local = "Campus Principal", DataInicio = new DateOnly(2026, 9, 21), DataFim = new DateOnly(2026, 9, 25) },
             new Evento { Id = 3, Nome = "Workshop Day", Codigo = "WKDAY26", Local = "Auditorio Central", DataInicio = new DateOnly(2026, 10, 5), DataFim = new DateOnly(2026, 10, 5) }
         );
@@ -51,10 +66,10 @@ public class AppDbContext : DbContext
         );
 
         modelBuilder.Entity<Participante>().HasData(
-            new Participante { Id = 1, Nome = "Vinicius Correia", Email = "viniciuscorreia@eventos.local", CodigoInscricao = "EVT20260001", DataNascimento = new DateOnly(2008, 3, 17), Ativo = true },
-            new Participante { Id = 2, Nome = "Ana Souza", Email = "ana.souza@eventos.local", CodigoInscricao = "EVT20260002", DataNascimento = new DateOnly(2002, 4, 12), Ativo = true },
-            new Participante { Id = 3, Nome = "Mariana Lima", Email = "mariana.lima@eventos.local", CodigoInscricao = "EVT20260003", DataNascimento = new DateOnly(2004, 8, 25), Ativo = true },
-            new Participante { Id = 4, Nome = "Carlos Pereira", Email = "carlos.pereira@eventos.local", CodigoInscricao = "EVT20260004", DataNascimento = new DateOnly(2003, 11, 9), Ativo = false }
+            new Participante { Id = 1, Nome = "Vinicius Correia", Email = "viniciuscorreia@eventos.local", CodigoInscricao = "EVT20260001", DataNascimento = new DateOnly(2008, 3, 17), Ativo = true, AceiteTermosLgpd = true, DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, DateTimeKind.Utc), VersaoTermosLgpd = "2026-05-26" },
+            new Participante { Id = 2, Nome = "Ana Souza", Email = "ana.souza@eventos.local", CodigoInscricao = "EVT20260002", DataNascimento = new DateOnly(2002, 4, 12), Ativo = true, AceiteTermosLgpd = true, DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, DateTimeKind.Utc), VersaoTermosLgpd = "2026-05-26" },
+            new Participante { Id = 3, Nome = "Mariana Lima", Email = "mariana.lima@eventos.local", CodigoInscricao = "EVT20260003", DataNascimento = new DateOnly(2004, 8, 25), Ativo = true, AceiteTermosLgpd = true, DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, DateTimeKind.Utc), VersaoTermosLgpd = "2026-05-26" },
+            new Participante { Id = 4, Nome = "Carlos Pereira", Email = "carlos.pereira@eventos.local", CodigoInscricao = "EVT20260004", DataNascimento = new DateOnly(2003, 11, 9), Ativo = false, AceiteTermosLgpd = true, DataAceiteTermosLgpd = new DateTime(2026, 5, 26, 0, 0, 0, DateTimeKind.Utc), VersaoTermosLgpd = "2026-05-26" }
         );
 
         modelBuilder.Entity<InscricaoWorkshop>().HasData(

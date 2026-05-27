@@ -5,6 +5,7 @@ namespace GestaoEventosWorkshops.Services;
 public interface IWorkshopService
 {
     Task<List<WorkshopResponseDto>> ListarTodosAsync();
+    Task<List<WorkshopResponseDto>> ListarPorOrganizadorAsync(int organizadorId);
     Task<WorkshopResponseDto?> BuscarPorIdAsync(int id);
     Task<WorkshopResponseDto> CriarAsync(WorkshopCreateDto dto);
     Task<bool> AtualizarAsync(int id, WorkshopUpdateDto dto);
