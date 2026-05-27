@@ -12,573 +12,591 @@
 	</style>
 </head>
 <body>
+
+    <!--A estrutura do HTML inclui três seções principais: a página de login, a área administrativa e a área do participante.-->
     <section class="login-page" id="loginPage">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-12 col-md-8 col-lg-5">
                     <div class="card login-card shadow-sm">
-						<div class="card-body p-4">
-							<span class="badge text-bg-primary logo-badge mb-3">EventHub</span>
-							<a href="index.html">
-								<img src="Img/Logo-EventHub.png" draggable="false"/>
-							</a>	
-							<h1 class="h3 mb-2">Gestão de Eventos</h1>
 
-							<form id="loginForm" class="vstack gap-3">
-								<div>
-									<label class="form-label" for="usuario">Usuário</label>
-									<input class="form-control" id="usuario" placeholder="Digite o usuário" autocomplete="username">
-								</div>
-								<div>
-									<label class="form-label" for="senha">Senha</label>
-									<div class="campo-senha">
-										<input class="form-control" id="senha" type="password" placeholder="Digite a senha" autocomplete="current-password">
-										<img src="Img/eye.svg" id="olhoSenha" class="olhoSenha">
-									</div>
-								</div>
-								<button class="btn btn-primary w-100" id="btnLogin" type="submit">Entrar</button>
-							</form>
+                        <!--// Seção de login, onde os usuários podem autenticar-se. Ela inclui um formulário de login para organizadores e um formulário de cadastro para participantes.-->
+                        <div class="card-body p-4">
+                            <span class="badge text-bg-primary logo-badge mb-3">EventHub</span>
+                            <a href="index.html">
+                                <img src="Img/Logo-EventHub.png" draggable="false" />
+                            </a>
+                            <h1 class="h3 mb-2">Gestão de Eventos</h1>
 
-							<hr class="my-4">
-							<button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#cadastroParticipanteLogin" aria-expanded="false" aria-controls="cadastroParticipanteLogin">Criar conta de participante</button>
-							<div class="collapse mt-3" id="cadastroParticipanteLogin">
-								<form id="cadastroContaForm" class="vstack gap-3">
-									<div>
-										<label class="form-label" for="contaNome">Nome</label>
-										<input class="form-control" id="contaNome" required maxlength="120" placeholder="Digite seu nome">
-									</div>
-									<div>
-										<label class="form-label" for="contaEmail">E-mail</label>
-										<input class="form-control" id="contaEmail" type="email" required maxlength="160"  placeholder="ex: exe@exemplo.com">
-									</div>
-									<div>
-										<label class="form-label" for="contaCodigo">Código de inscrição</label>
-										<input class="form-control" id="contaCodigo" required maxlength="20" placeholder="ex: 123456">
-									</div>
-									<div>
-										<label class="form-label" for="contaDataNascimento">Data de nascimento</label>
-										<input class="form-control" id="contaDataNascimento" type="date" required>
-									</div>
-									<div class="form-check">
-										<input class="form-check-input" id="contaAceiteLgpd" type="checkbox" required>
-										<label class="form-check-label" for="contaAceiteLgpd">Autorizo o tratamento dos meus dados para cadastro, inscricoes, comunicacoes do evento e emissao de historico/certificado, conforme os <button class="btn btn-link p-0 align-baseline" type="button" data-bs-toggle="modal" data-bs-target="#modalTermosUso">Termos de Uso</button>.</label>
-									</div>
-									<button class="btn btn-success w-100" type="submit">Cadastrar e entrar</button>
-								</form>
-							</div>
-						</div>
+                            <form id="loginForm" class="vstack gap-3">
+                                <div>
+                                    <label class="form-label" for="usuario">Usuário</label>
+                                    <input class="form-control" id="usuario" placeholder="Digite o usuário" autocomplete="username">
+                                </div>
+                                <div>
+                                    <label class="form-label" for="senha">Senha</label>
+
+                                    <!--O campo de senha inclui um ícone de olho para mostrar ou ocultar a senha digitada, melhorando a usabilidade.-->
+                                    <div class="campo-senha">
+                                        <input class="form-control" id="senha" type="password" placeholder="Digite a senha" autocomplete="current-password">
+                                        <img src="Img/eye.svg" id="olhoSenha" class="olhoSenha">
+                                    </div>
+                                </div>
+                                <button class="btn btn-primary w-100" id="btnLogin" type="submit">Entrar</button>
+                            </form>
+
+                            <hr class="my-4">
+
+                            <!--Seção de cadastro para participantes, que é inicialmente oculta e pode ser expandida ao clicar no botão "Criar conta de participante"-->
+                            <button class="btn btn-outline-primary w-100" type="button" data-bs-toggle="collapse" data-bs-target="#cadastroParticipanteLogin" aria-expanded="false" aria-controls="cadastroParticipanteLogin">Criar conta de participante</button>
+                            <div class="collapse mt-3" id="cadastroParticipanteLogin">
+                                <form id="cadastroContaForm" class="vstack gap-3">
+                                    <div>
+                                        <label class="form-label" for="contaNome">Nome</label>
+                                        <input class="form-control" id="contaNome" required maxlength="120" placeholder="Digite seu nome">
+                                    </div>
+                                    <div>
+                                        <label class="form-label" for="contaEmail">E-mail</label>
+                                        <input class="form-control" id="contaEmail" type="email" required maxlength="160" placeholder="ex: exe@exemplo.com">
+                                    </div>
+                                    <div>
+                                        <label class="form-label" for="contaCodigo">Código de inscrição</label>
+                                        <input class="form-control" id="contaCodigo" required maxlength="20" placeholder="ex: 123456">
+                                    </div>
+                                    <div>
+                                        <label class="form-label" for="contaDataNascimento">Data de nascimento</label>
+                                        <input class="form-control" id="contaDataNascimento" type="date" required>
+                                    </div>
+
+                                    <!--// O checkbox para aceitar os termos de uso é obrigatório para garantir que os participantes concordem com as políticas de privacidade e uso de dados antes de criar a conta.-->
+                                    <div class="form-check">
+                                        <input class="form-check-input" id="contaAceiteLgpd" type="checkbox" required>
+                                        <label class="form-check-label" for="contaAceiteLgpd">Autorizo o tratamento dos meus dados para cadastro, inscricoes, comunicacoes do evento e emissao de historico/certificado, conforme os <button class="btn btn-link p-0 align-baseline" type="button" data-bs-toggle="modal" data-bs-target="#modalTermosUso">Termos de Uso</button>.</label>
+                                    </div>
+                                    <button class="btn btn-success w-100" type="submit">Cadastrar e entrar</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <!--A área administrativa, onde os organizadores podem criar, editar e visualizar os dados dos participantes, eventos, workshops e inscrições.-->
     <section class="d-none" id="homePage">
         <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-			<div class="container">
-				<img src="Img/Logo-EventHub.png" draggable="false"/>
-				<span class="navbar-brand fw-semibold" id="nomedapagina"></span>
-				<div class="d-flex align-items-center gap-2">
-					<span class="badge text-bg-primary logo-badge">EventHub</span>
-					<button class="btn btn-outline-secondary btn-sm" id="btnLogout" type="button">Sair</button>
-				</div>
-			</div>
+            <div class="container">
+                <img src="Img/Logo-EventHub.png" draggable="false" />
+                <span class="navbar-brand fw-semibold" id="nomedapagina"></span>
+                <div class="d-flex align-items-center gap-2">
+                    <button class="btn btn-outline-secondary btn-sm" id="btnLogout" type="button">Sair</button>
+                </div>
+            </div>
         </nav>
 
-		<main class="container py-4">
-			<div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
-				<div>
-					<h1 class="h4 mb-1">Home</h1>
-					<p class="text-muted mb-0">Gerencie participantes, eventos, workshops e inscrições.</p>
-				</div>
-				<button class="btn btn-outline-primary btn-sm align-self-md-start" id="btnAtualizar" type="button">Atualizar dados</button>
-			</div>
+        <main class="container py-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between gap-2 mb-3">
+                <div>
+                    <h1 class="h4 mb-1">Home</h1>
+                    <p class="text-muted mb-0">Gerencie participantes, eventos, workshops e inscrições.</p>
+                </div>
 
-			<ul class="nav nav-tabs mb-4" id="abasSistema" role="tablist">
-				<li class="nav-item" role="presentation">
-					<button class="nav-link active" id="abaDashboardBotao" data-bs-toggle="tab" data-bs-target="#abaDashboard" type="button" role="tab" aria-controls="abaDashboard" aria-selected="true">Dashboard</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="abaParticipantesBotao" data-bs-toggle="tab" data-bs-target="#abaParticipantes" type="button" role="tab" aria-controls="abaParticipantes" aria-selected="false">Participantes</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="abaEventosBotao" data-bs-toggle="tab" data-bs-target="#abaEventos" type="button" role="tab" aria-controls="abaEventos" aria-selected="false">Eventos</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="abaWorkshopsBotao" data-bs-toggle="tab" data-bs-target="#abaWorkshops" type="button" role="tab" aria-controls="abaWorkshops" aria-selected="false">Workshops</button>
-				</li>
-				<li class="nav-item" role="presentation">
-					<button class="nav-link" id="abaInscricoesBotao" data-bs-toggle="tab" data-bs-target="#abaInscricoes" type="button" role="tab" aria-controls="abaInscricoes" aria-selected="false">Inscrições</button>
-				</li>
-				<li class="nav-item" role="presentation" id="abaOrganizadoresItem">
-					<button class="nav-link" id="abaOrganizadoresBotao" data-bs-toggle="tab" data-bs-target="#abaOrganizadores" type="button" role="tab" aria-controls="abaOrganizadores" aria-selected="false">Organizadores</button>
-				</li>
-			</ul>
+                <!--// O botão "Atualizar dados" permite que os organizadores recarreguem as informações exibidas na dashboard e nas tabelas, garantindo que estejam sempre vendo os dados mais recentes sem precisar atualizar a página inteira.-->
+                <button class="btn btn-outline-primary btn-sm align-self-md-start" id="btnAtualizar" type="button">Atualizar dados</button>
+            </div>
 
-			<div class="tab-content">
-				<section class="tab-pane fade show active" id="abaDashboard" role="tabpanel" aria-labelledby="abaDashboardBotao" tabindex="0">
-					<div class="row g-3 mb-4">
-						<div class="col-6 col-xl-3">
-							<div class="metric-card">
-								<span class="metric-label">Participantes cadastrados</span>
-								<strong id="dashTotalParticipantes">0</strong>
-								<small id="dashParticipantesAtivos">0 ativos</small>
-							</div>
-						</div>
-						<div class="col-6 col-xl-3">
-							<div class="metric-card">
-								<span class="metric-label">Eventos</span>
-								<strong id="dashTotalEventos">0</strong>
-								<small id="dashMediaParticipantesEvento">0 participantes por evento</small>
-							</div>
-						</div>
-						<div class="col-6 col-xl-3">
-							<div class="metric-card">
-								<span class="metric-label">Workshops</span>
-								<strong id="dashTotalWorkshops">0</strong>
-								<small id="dashCargaHoraria">0h cadastradas</small>
-							</div>
-						</div>
-						<div class="col-6 col-xl-3">
-							<div class="metric-card">
-								<span class="metric-label">Inscrições</span>
-								<strong id="dashTotalInscricoes">0</strong>
-								<small id="dashUltimaInscricao">Sem registro recente</small>
-							</div>
-						</div>
-					</div>
+            <!--As abas de navegação permitem que os organizadores alternem entre diferentes seções do sistema-->
+            <ul class="nav nav-tabs mb-4" id="abasSistema" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="abaDashboardBotao" data-bs-toggle="tab" data-bs-target="#abaDashboard" type="button" role="tab" aria-controls="abaDashboard" aria-selected="true">Dashboard</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="abaParticipantesBotao" data-bs-toggle="tab" data-bs-target="#abaParticipantes" type="button" role="tab" aria-controls="abaParticipantes" aria-selected="false">Participantes</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="abaEventosBotao" data-bs-toggle="tab" data-bs-target="#abaEventos" type="button" role="tab" aria-controls="abaEventos" aria-selected="false">Eventos</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="abaWorkshopsBotao" data-bs-toggle="tab" data-bs-target="#abaWorkshops" type="button" role="tab" aria-controls="abaWorkshops" aria-selected="false">Workshops</button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="abaInscricoesBotao" data-bs-toggle="tab" data-bs-target="#abaInscricoes" type="button" role="tab" aria-controls="abaInscricoes" aria-selected="false">Inscrições</button>
+                </li>
+                <li class="nav-item" role="presentation" id="abaOrganizadoresItem">
+                    <button class="nav-link" id="abaOrganizadoresBotao" data-bs-toggle="tab" data-bs-target="#abaOrganizadores" type="button" role="tab" aria-controls="abaOrganizadores" aria-selected="false">Organizadores</button>
+                </li>
+            </ul>
 
-					<div class="row g-4">
-						<div class="col-12 col-xl-7">
-							<div class="card dashboard-panel">
-								<div class="card-header fw-semibold">Participantes por evento</div>
-								<div class="card-body" id="dashParticipantesPorEvento"></div>
-							</div>
-						</div>
-						<div class="col-12 col-xl-5">
-							<div class="card dashboard-panel">
-								<div class="card-header fw-semibold">Resumo para relatórios</div>
-								<div class="list-group list-group-flush" id="dashResumoRelatorios"></div>
-							</div>
-						</div>
-						<div class="col-12">
-							<div class="card dashboard-panel">
-								<div class="card-header fw-semibold">Últimas inscrições</div>
-								<div class="table-responsive">
-									<table class="table table-sm table-hover align-middle mb-0">
-										<thead>
-											<tr>
-												<th>Participante</th>
-												<th>Evento</th>
-												<th>Workshop</th>
-												<th>Data</th>
-												<th>Status</th>
-											</tr>
-										</thead>
-										<tbody id="dashUltimasInscricoes"></tbody>
-									</table>
-								</div>
-							</div>
-						</div>
-					</div>
-				</section>
+            
+            <div class="tab-content">
 
-				<section class="tab-pane fade" id="abaParticipantes" role="tabpanel" aria-labelledby="abaParticipantesBotao" tabindex="0">
-					<div class="row g-4">
-						<div class="col-12 col-xl-4">
-							<div class="card">
-								<div class="card-header fw-semibold">Cadastro de participante</div>
-								<div class="card-body">
-									<form id="participanteForm" class="vstack gap-3">
-										<input type="hidden" id="participanteId">
-										<div>
-											<label class="form-label" for="nome">Nome</label>
-											<input class="form-control" id="nome" required maxlength="120">
-										</div>
-										<div>
-											<label class="form-label" for="email">E-mail</label>
-											<input class="form-control" id="email" type="email" required maxlength="160">
-										</div>
-										<div>
-											<label class="form-label" for="inscricao">Inscrição</label>
-											<input class="form-control" id="inscricao" required maxlength="20">
-										</div>
-										<div>
-											<label class="form-label" for="dataNascimento">Data de nascimento</label>
-											<input class="form-control" id="dataNascimento" type="date" required>
-										</div>
-										<div class="form-check">
-											<input class="form-check-input" id="ativo" type="checkbox" checked>
-											<label class="form-check-label" for="ativo">Participante ativo</label>
-										</div>
-										<div class="d-flex gap-2">
-											<button class="btn btn-success flex-fill" type="submit">Salvar</button>
-											<button class="btn btn-outline-secondary" id="btnCancelar" type="button">Limpar</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+                <!--// A aba "Dashboard" apresenta uma visão geral dos principais indicadores do sistema, como o número total de participantes, eventos, workshops e inscrições, além de gráficos e tabelas resumidas-->
+                <section class="tab-pane fade show active" id="abaDashboard" role="tabpanel" aria-labelledby="abaDashboardBotao" tabindex="0">
+                    <div class="row g-3 mb-4">
+                        <div class="col-6 col-xl-3">
+                            <div class="metric-card">
+                                <span class="metric-label">Participantes cadastrados</span>
+                                <strong id="dashTotalParticipantes">0</strong>
+                                <small id="dashParticipantesAtivos">0 ativos</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-xl-3">
+                            <div class="metric-card">
+                                <span class="metric-label">Eventos</span>
+                                <strong id="dashTotalEventos">0</strong>
+                                <small id="dashMediaParticipantesEvento">0 participantes por evento</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-xl-3">
+                            <div class="metric-card">
+                                <span class="metric-label">Workshops</span>
+                                <strong id="dashTotalWorkshops">0</strong>
+                                <small id="dashCargaHoraria">0h cadastradas</small>
+                            </div>
+                        </div>
+                        <div class="col-6 col-xl-3">
+                            <div class="metric-card">
+                                <span class="metric-label">Inscrições</span>
+                                <strong id="dashTotalInscricoes">0</strong>
+                                <small id="dashUltimaInscricao">Sem registro recente</small>
+                            </div>
+                        </div>
+                    </div>
 
-						<div class="col-12 col-xl-8">
-							<div class="d-flex justify-content-between align-items-center mb-3">
-								<h2 class="h5 mb-0">Participantes cadastrados</h2>
-							</div>
-							<div class="row g-2 mb-3">
-								<div class="col-12 col-md-5">
-									<label class="form-label" for="buscaParticipante">Buscar</label>
-									<input class="form-control" id="buscaParticipante" placeholder="Nome, e-mail ou inscricao">
-								</div>
-								<div class="col-12 col-md-4">
-									<label class="form-label" for="filtroEvento">Evento</label>
-									<select class="form-select" id="filtroEvento">
-										<option value="">Todos os eventos</option>
-									</select>
-								</div>
-								<div class="col-12 col-md-3">
-									<label class="form-label" for="filtroStatus">Status</label>
-									<select class="form-select" id="filtroStatus">
-										<option value="">Todos</option>
-										<option value="ativo">Ativos</option>
-										<option value="inativo">Inativos</option>
-									</select>
-								</div>
-							</div>
-							<div class="table-responsive">
-								<table class="table table-striped table-hover align-middle">
-									<thead>
-										<tr>
-											<th>Inscrição</th>
-											<th>Nome</th>
-													<th>Status</th>
-											<th class="text-end">Ações</th>
-										</tr>
-									</thead>
-									<tbody id="participantesTabela"></tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</section>
+                    <div class="row g-4">
+                        <div class="col-12 col-xl-7">
+                            <div class="card dashboard-panel">
+                                <div class="card-header fw-semibold">Participantes por evento</div>
+                                <div class="card-body" id="dashParticipantesPorEvento"></div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-5">
+                            <div class="card dashboard-panel">
+                                <div class="card-header fw-semibold">Resumo para relatórios</div>
+                                <div class="list-group list-group-flush" id="dashResumoRelatorios"></div>
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="card dashboard-panel">
+                                <div class="card-header fw-semibold">Últimas inscrições</div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm table-hover align-middle mb-0">
+                                        <thead>
+                                            <tr>
+                                                <th>Participante</th>
+                                                <th>Evento</th>
+                                                <th>Workshop</th>
+                                                <th>Data</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dashUltimasInscricoes"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-				<section class="tab-pane fade" id="abaEventos" role="tabpanel" aria-labelledby="abaEventosBotao" tabindex="0">
-					<div class="row g-4">
-						<div class="col-12 col-xl-4">
-							<div class="card">
-								<div class="card-header fw-semibold">Cadastro de evento</div>
-								<div class="card-body">
-									<form id="eventoForm" class="vstack gap-3">
-										<input type="hidden" id="eventoCadastroId">
-										<div>
-											<label class="form-label" for="eventoNome">Nome</label>
-											<input class="form-control" id="eventoNome" required maxlength="120">
-										</div>
-										<div>
-											<label class="form-label" for="eventoCodigo">Código</label>
-											<input class="form-control" id="eventoCodigo" required maxlength="20">
-										</div>
-										<div>
-											<label class="form-label" for="eventoLocal">Local</label>
-											<input class="form-control" id="eventoLocal" required maxlength="160">
-										</div>
-										<div>
-											<label class="form-label" for="eventoDataInicio">Data de início</label>
-											<input class="form-control" id="eventoDataInicio" type="date" required>
-										</div>
-										<div>
-											<label class="form-label" for="eventoDataFim">Data de fim</label>
-											<input class="form-control" id="eventoDataFim" type="date" required>
-										</div>
-										<div>
-											<label class="form-label" for="eventoOrganizadorId">Organizador responsável</label>
-											<select class="form-select" id="eventoOrganizadorId">
-												<option value="">Sem responsável</option>
-											</select>
-										</div>
-										<div class="d-flex gap-2">
-											<button class="btn btn-success flex-fill" type="submit">Salvar</button>
-											<button class="btn btn-outline-secondary" id="btnCancelarEvento" type="button">Limpar</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+                // 
+                <section class="tab-pane fade" id="abaParticipantes" role="tabpanel" aria-labelledby="abaParticipantesBotao" tabindex="0">
+                    <div class="row g-4">
+                        <div class="col-12 col-xl-4">
+                            <div class="card">
+                                <div class="card-header fw-semibold">Cadastro de participante</div>
+                                <div class="card-body">
+                                    <form id="participanteForm" class="vstack gap-3">
+                                        <input type="hidden" id="participanteId">
+                                        <div>
+                                            <label class="form-label" for="nome">Nome</label>
+                                            <input class="form-control" id="nome" required maxlength="120">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="email">E-mail</label>
+                                            <input class="form-control" id="email" type="email" required maxlength="160">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="inscricao">Inscrição</label>
+                                            <input class="form-control" id="inscricao" required maxlength="20">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="dataNascimento">Data de nascimento</label>
+                                            <input class="form-control" id="dataNascimento" type="date" required>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" id="ativo" type="checkbox" checked>
+                                            <label class="form-check-label" for="ativo">Participante ativo</label>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-success flex-fill" type="submit">Salvar</button>
+                                            <button class="btn btn-outline-secondary" id="btnCancelar" type="button">Limpar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-						<div class="col-12 col-xl-8">
-							<div class="d-flex justify-content-between align-items-center mb-3">
-								<h2 class="h5 mb-0">Eventos cadastrados</h2>
-							</div>
-							<div class="table-responsive">
-								<table class="table table-striped table-hover align-middle">
-									<thead>
-										<tr>
-											<th>Código</th>
-											<th>Evento</th>
-											<th>Local</th><th>Período</th>
-											<th class="text-end">Ações</th>
-										</tr>
-									</thead>
-									<tbody id="eventosTabela"></tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</section>
+                        <div class="col-12 col-xl-8">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0">Participantes cadastrados</h2>
+                            </div>
+                            <div class="row g-2 mb-3">
+                                <div class="col-12 col-md-5">
+                                    <label class="form-label" for="buscaParticipante">Buscar</label>
+                                    <input class="form-control" id="buscaParticipante" placeholder="Nome, e-mail ou inscricao">
+                                </div>
+                                <div class="col-12 col-md-4">
+                                    <label class="form-label" for="filtroEvento">Evento</label>
+                                    <select class="form-select" id="filtroEvento">
+                                        <option value="">Todos os eventos</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-3">
+                                    <label class="form-label" for="filtroStatus">Status</label>
+                                    <select class="form-select" id="filtroStatus">
+                                        <option value="">Todos</option>
+                                        <option value="ativo">Ativos</option>
+                                        <option value="inativo">Inativos</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Inscrição</th>
+                                            <th>Nome</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="participantesTabela"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-				<section class="tab-pane fade" id="abaWorkshops" role="tabpanel" aria-labelledby="abaWorkshopsBotao" tabindex="0">
-					<div class="row g-4">
-						<div class="col-12 col-xl-4">
-							<div class="card">
-								<div class="card-header fw-semibold">Cadastro de workshop</div>
-								<div class="card-body">
-									<form id="workshopForm" class="vstack gap-3">
-										<input type="hidden" id="workshopId">
-										<div>
-											<label class="form-label" for="workshopNome">Nome</label>
-											<input class="form-control" id="workshopNome" required maxlength="120">
-										</div>
-										<div>
-											<label class="form-label" for="workshopCodigo">Código</label>
-											<input class="form-control" id="workshopCodigo" required maxlength="20">
-										</div>
-										<div>
-											<label class="form-label" for="workshopCargaHoraria">Carga horária</label>
-											<input class="form-control" id="workshopCargaHoraria" type="number" min="1" max="400" required>
-										</div>
-										<div>
-											<label class="form-label" for="workshopEventoId">Evento</label>
-											<select class="form-select" id="workshopEventoId" required></select>
-										</div>
-										<div class="d-flex gap-2">
-											<button class="btn btn-success flex-fill" type="submit">Salvar</button>
-											<button class="btn btn-outline-secondary" id="btnCancelarWorkshop" type="button">Limpar</button>
-										</div>
-									</form>
-								</div>
-							</div>
-						</div>
+                <section class="tab-pane fade" id="abaEventos" role="tabpanel" aria-labelledby="abaEventosBotao" tabindex="0">
+                    <div class="row g-4">
+                        <div class="col-12 col-xl-4">
+                            <div class="card">
+                                <div class="card-header fw-semibold">Cadastro de evento</div>
+                                <div class="card-body">
+                                    <form id="eventoForm" class="vstack gap-3">
+                                        <input type="hidden" id="eventoCadastroId">
+                                        <div>
+                                            <label class="form-label" for="eventoNome">Nome</label>
+                                            <input class="form-control" id="eventoNome" required maxlength="120">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="eventoCodigo">Código</label>
+                                            <input class="form-control" id="eventoCodigo" required maxlength="20">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="eventoLocal">Local</label>
+                                            <input class="form-control" id="eventoLocal" required maxlength="160">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="eventoDataInicio">Data de início</label>
+                                            <input class="form-control" id="eventoDataInicio" type="date" required>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="eventoDataFim">Data de fim</label>
+                                            <input class="form-control" id="eventoDataFim" type="date" required>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="eventoOrganizadorId">Organizador responsável</label>
+                                            <select class="form-select" id="eventoOrganizadorId">
+                                                <option value="">Sem responsável</option>
+                                            </select>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-success flex-fill" type="submit">Salvar</button>
+                                            <button class="btn btn-outline-secondary" id="btnCancelarEvento" type="button">Limpar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-						<div class="col-12 col-xl-8">
-							<div class="d-flex justify-content-between align-items-center mb-3">
-								<h2 class="h5 mb-0">Workshops cadastrados</h2>
-							</div>
-							<div class="table-responsive">
-								<table class="table table-striped table-hover align-middle">
-									<thead>
-										<tr>
-											<th>Código</th>
-											<th>Evento</th>
-											<th>Workshop</th>
-											<th>Carga horária</th>
-											<th class="text-end">Ações</th>
-										</tr>
-									</thead>
-									<tbody id="workshopsTabela"></tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</section>
+                        <div class="col-12 col-xl-8">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0">Eventos cadastrados</h2>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Evento</th>
+                                            <th>Local</th>
+                                            <th>Período</th>
+                                            <th class="text-end">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="eventosTabela"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-				<section class="tab-pane fade" id="abaInscricoes" role="tabpanel" aria-labelledby="abaInscricoesBotao" tabindex="0">
-					<div class="row g-4">
-						<div class="col-12 col-xl-4">
-							<div class="card">
-								<div class="card-header fw-semibold">Realizar inscrição</div>
-								<div class="card-body">
-									<form id="inscricaoForm" class="vstack gap-3">
-										<div>
-											<label class="form-label" for="inscricaoParticipanteId">Participante</label>
-											<select class="form-select" id="inscricaoParticipanteId" required></select>
-										</div>
-										<div>
-											<label class="form-label" for="inscricaoWorkshopId">Workshop</label>
-											<select class="form-select" id="inscricaoWorkshopId" required></select>
-										</div>
-										<button class="btn btn-success" type="submit">Inscrever</button>
-									</form>
-								</div>
-							</div>
-						</div>
+                <section class="tab-pane fade" id="abaWorkshops" role="tabpanel" aria-labelledby="abaWorkshopsBotao" tabindex="0">
+                    <div class="row g-4">
+                        <div class="col-12 col-xl-4">
+                            <div class="card">
+                                <div class="card-header fw-semibold">Cadastro de workshop</div>
+                                <div class="card-body">
+                                    <form id="workshopForm" class="vstack gap-3">
+                                        <input type="hidden" id="workshopId">
+                                        <div>
+                                            <label class="form-label" for="workshopNome">Nome</label>
+                                            <input class="form-control" id="workshopNome" required maxlength="120">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="workshopCodigo">Código</label>
+                                            <input class="form-control" id="workshopCodigo" required maxlength="20">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="workshopCargaHoraria">Carga horária</label>
+                                            <input class="form-control" id="workshopCargaHoraria" type="number" min="1" max="400" required>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="workshopEventoId">Evento</label>
+                                            <select class="form-select" id="workshopEventoId" required></select>
+                                        </div>
+                                        <div class="d-flex gap-2">
+                                            <button class="btn btn-success flex-fill" type="submit">Salvar</button>
+                                            <button class="btn btn-outline-secondary" id="btnCancelarWorkshop" type="button">Limpar</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-						<div class="col-12 col-xl-8">
-							<div class="d-flex justify-content-between align-items-center mb-3">
-								<h2 class="h5 mb-0">Inscrições realizadas</h2>
-							</div>
-							<div class="table-responsive">
-								<table class="table table-striped table-hover align-middle">
-									<thead>
-										<tr>
-											<th>Participante</th>
-											<th>Evento</th>
-											<th>Workshop</th>
-											<th>Data</th>
-											<th>Status</th>
-											<th class="text-end">Ações</th>
-										</tr>
-									</thead>
-									<tbody id="inscricoesTabela"></tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</section>
+                        <div class="col-12 col-xl-8">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0">Workshops cadastrados</h2>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Código</th>
+                                            <th>Evento</th>
+                                            <th>Workshop</th>
+                                            <th>Carga horária</th>
+                                            <th class="text-end">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="workshopsTabela"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
 
-				<section class="tab-pane fade" id="abaOrganizadores" role="tabpanel" aria-labelledby="abaOrganizadoresBotao" tabindex="0">
-					<div class="row g-4">
-						<div class="col-12 col-xl-4">
-							<div class="card">
-								<div class="card-header fw-semibold">Conta de organizador</div>
-								<div class="card-body">
-									<form id="organizadorForm" class="vstack gap-3">
-										<div>
-											<label class="form-label" for="organizadorNome">Nome</label>
-											<input class="form-control" id="organizadorNome" required maxlength="120">
-										</div>
-										<div>
-											<label class="form-label" for="organizadorEmail">E-mail</label>
-											<input class="form-control" id="organizadorEmail" type="email" required maxlength="160">
-										</div>
-										<div>
-											<label class="form-label" for="organizadorSenha">Senha</label>
-											<input class="form-control" id="organizadorSenha" type="password" required minlength="6" maxlength="80" autocomplete="new-password">
-										</div>
-										<button class="btn btn-success" type="submit">Criar organizador</button>
-									</form>
-								</div>
-							</div>
-						</div>
-						<div class="col-12 col-xl-8">
-							<h2 class="h5 mb-3">Organizadores cadastrados</h2>
-							<div class="table-responsive">
-								<table class="table table-striped table-hover align-middle">
-									<thead>
-										<tr>
-											<th>Nome</th>
-											<th>E-mail</th>
-											<th>Status</th>
-										</tr>
-									</thead>
-									<tbody id="organizadoresTabela"></tbody>
-								</table>
-							</div>
-						</div>
-					</div>
-				</section>
-			</div>
+                <section class="tab-pane fade" id="abaInscricoes" role="tabpanel" aria-labelledby="abaInscricoesBotao" tabindex="0">
+                    <div class="row g-4">
+                        <div class="col-12 col-xl-4">
+                            <div class="card">
+                                <div class="card-header fw-semibold">Realizar inscrição</div>
+                                <div class="card-body">
+                                    <form id="inscricaoForm" class="vstack gap-3">
+                                        <div>
+                                            <label class="form-label" for="inscricaoParticipanteId">Participante</label>
+                                            <select class="form-select" id="inscricaoParticipanteId" required></select>
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="inscricaoWorkshopId">Workshop</label>
+                                            <select class="form-select" id="inscricaoWorkshopId" required></select>
+                                        </div>
+                                        <button class="btn btn-success" type="submit">Inscrever</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
 
-			<div class="app-alert d-none" id="mensagem"></div>
-		</main>
+                        <div class="col-12 col-xl-8" id=" table-inscricoes">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h2 class="h5 mb-0">Inscrições realizadas</h2>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Participante</th>
+                                            <th>Evento</th>
+                                            <th>Workshop</th>
+                                            <th>Data</th>
+                                            <th>Status</th>
+                                            <th class="text-end">Ações</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="inscricoesTabela"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="tab-pane fade" id="abaOrganizadores" role="tabpanel" aria-labelledby="abaOrganizadoresBotao" tabindex="0">
+                    <div class="row g-4">
+                        <div class="col-12 col-xl-4">
+                            <div class="card">
+                                <div class="card-header fw-semibold">Conta de organizador</div>
+                                <div class="card-body">
+                                    <form id="organizadorForm" class="vstack gap-3">
+                                        <div>
+                                            <label class="form-label" for="organizadorNome">Nome</label>
+                                            <input class="form-control" id="organizadorNome" required maxlength="120">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="organizadorEmail">E-mail</label>
+                                            <input class="form-control" id="organizadorEmail" type="email" required maxlength="160">
+                                        </div>
+                                        <div>
+                                            <label class="form-label" for="organizadorSenha">Senha</label>
+                                            <input class="form-control" id="organizadorSenha" type="password" required minlength="6" maxlength="80" autocomplete="new-password">
+                                        </div>
+                                        <button class="btn btn-success" type="submit">Criar organizador</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-12 col-xl-8">
+                            <h2 class="h5 mb-3">Organizadores cadastrados</h2>
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover align-middle">
+                                    <thead>
+                                        <tr>
+                                            <th>Nome</th>
+                                            <th>E-mail</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="organizadoresTabela"></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <div class="app-alert d-none" id="mensagem"></div>
+        </main>
     </section>
 
-	<section class="d-none" id="participantPage">
-		<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
-			<div class="container">
-				<img src="Img/Logo-EventHub.png" />
-				<div>
-					<span class="navbar-brand fw-semibold d-block">Área do Participante</span>
-					<small class="text-muted" id="participanteHeaderNome">Bem-vindo</small>
-				</div>
-				<div class="d-flex align-items-center gap-2">
-					<span class="badge text-bg-primary logo-badge">EventHub</span>
-					<button class="btn btn-outline-secondary btn-sm" id="btnLogoutParticipante" type="button">Sair</button>
-				</div>
-			</div>
-		</nav>
+    <section class="d-none" id="participantPage">
+        <nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom">
+            <div class="container">
+                <img src="Img/Logo-EventHub.png" />
+                <div>
+                    <span class="navbar-brand fw-semibold d-block">Área do Participante</span>
+                    <small class="text-muted" id="participanteHeaderNome">Bem-vindo</small>
+                </div>
+                <div class="d-flex align-items-center gap-2">
+                    <span class="badge text-bg-primary logo-badge">EventHub</span>
+                    <button class="btn btn-outline-secondary btn-sm" id="btnLogoutParticipante" type="button">Sair</button>
+                </div>
+            </div>
+        </nav>
 
-		<main class="container py-4">
-			<div class="participant-hero mb-4">
-				<div>
-					<span class="metric-label">Minha jornada</span>
-					<h1 class="h3 mb-1" id="participanteTitulo">Olá, participante</h1>
-					<p class="mb-0">Acompanhe seus eventos, workshops confirmados e histórico de capacitação.</p>
-				</div>
-			</div>
+        <main class="container py-4">
+            <div class="participant-hero mb-4">
+                <div>
+                    <span class="metric-label">Minha jornada</span>
+                    <h1 class="h3 mb-1" id="participanteTitulo">Olá, participante</h1>
+                    <p class="mb-0">Acompanhe seus eventos, workshops confirmados e histórico de capacitação.</p>
+                </div>
+            </div>
 
-			<div class="row g-3 mb-4">
-				<div class="col-12 col-md-4">
-					<div class="metric-card">
-						<span class="metric-label">Próximos eventos</span>
-						<strong id="participanteMetricEventos">0</strong>
-						<small>Eventos com inscrições futuras</small>
-					</div>
-				</div>
-				<div class="col-12 col-md-4">
-					<div class="metric-card">
-						<span class="metric-label">Workshops</span>
-						<strong id="participanteMetricWorkshops">0</strong>
-						<small>Inscrições vinculadas a workshops</small>
-					</div>
-				</div>
-				<div class="col-12 col-md-4">
-					<div class="metric-card">
-						<span class="metric-label">Histórico</span>
-						<strong id="participanteMetricHistorico">0h</strong>
-						<small>Horas de capacitação acumuladas</small>
-					</div>
-				</div>
-			</div>
+            <div class="row g-3 mb-4">
+                <div class="col-12 col-md-4">
+                    <div class="metric-card">
+                        <span class="metric-label">Próximos eventos</span>
+                        <strong id="participanteMetricEventos">0</strong>
+                        <small>Eventos com inscrições futuras</small>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="metric-card">
+                        <span class="metric-label">Workshops</span>
+                        <strong id="participanteMetricWorkshops">0</strong>
+                        <small>Inscrições vinculadas a workshops</small>
+                    </div>
+                </div>
+                <div class="col-12 col-md-4">
+                    <div class="metric-card">
+                        <span class="metric-label">Histórico</span>
+                        <strong id="participanteMetricHistorico">0h</strong>
+                        <small>Horas de capacitação acumuladas</small>
+                    </div>
+                </div>
+            </div>
 
-			<div class="card mb-4">
-				<div class="card-body">
-					<div class="row g-3">
-						<div class="col-12 col-lg-5">
-							<label class="form-label" for="participanteBusca">Buscar</label>
-							<input class="form-control" id="participanteBusca" placeholder="Evento, workshop ou local">
-						</div>
-						<div class="col-12 col-md-6 col-lg-3">
-							<label class="form-label" for="participanteFiltroTipo">Tipo</label>
-							<select class="form-select" id="participanteFiltroTipo">
-								<option value="">Eventos e workshops</option>
-								<option value="eventos">Eventos</option>
-								<option value="workshops">Workshops</option>
-							</select>
-						</div>
-						<div class="col-12 col-md-6 col-lg-4">
-							<label class="form-label" for="participanteFiltroStatus">Status</label>
-							<select class="form-select" id="participanteFiltroStatus">
-								<option value="">Todos os status</option>
-								<option value="Inscrito">Inscrito</option>
-								<option value="Confirmado">Confirmado</option>
-								<option value="Concluido">Concluído</option>
-							</select>
-						</div>
-					</div>
-				</div>
-			</div>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <div class="col-12 col-lg-5">
+                            <label class="form-label" for="participanteBusca">Buscar</label>
+                            <input class="form-control" id="participanteBusca" placeholder="Evento, workshop ou local">
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-3">
+                            <label class="form-label" for="participanteFiltroTipo">Tipo</label>
+                            <select class="form-select" id="participanteFiltroTipo">
+                                <option value="">Eventos e workshops</option>
+                                <option value="eventos">Eventos</option>
+                                <option value="workshops">Workshops</option>
+                            </select>
+                        </div>
+                        <div class="col-12 col-md-6 col-lg-4">
+                            <label class="form-label" for="participanteFiltroStatus">Status</label>
+                            <select class="form-select" id="participanteFiltroStatus">
+                                <option value="">Todos os status</option>
+                                <option value="Inscrito">Inscrito</option>
+                                <option value="Confirmado">Confirmado</option>
+                                <option value="Concluido">Concluído</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-			<div class="row g-4 mb-4" id="participanteCards"></div>
+            <div class="row g-4 mb-4" id="participanteCards"></div>
 
-			<div class="card dashboard-panel">
-				<div class="card-header fw-semibold d-flex justify-content-between">
-					<span>Histórico de capacitação</span>
-					<span id="participanteHistoricoHoras">0h acumuladas</span>
-				</div>
-				<div class="table-responsive">
-					<table class="table table-sm table-hover align-middle mb-0">
-						<thead>
-							<tr>
-								<th>Evento</th>
-								<th>Workshop</th>
-								<th>Status</th>
-								<th>Carga horária</th>
-							</tr>
-						</thead>
-						<tbody id="participanteHistoricoTabela"></tbody>
-					</table>
-				</div>
-			</div>
+            <div class="card dashboard-panel">
+                <div class="card-header fw-semibold d-flex justify-content-between">
+                    <span>Histórico de capacitação</span>
+                    <span id="participanteHistoricoHoras">0h acumuladas</span>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-sm table-hover align-middle mb-0">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Workshop</th>
+                                <th>Status</th>
+                                <th>Carga horária</th>
+                            </tr>
+                        </thead>
+                        <tbody id="participanteHistoricoTabela"></tbody>
+                    </table>
+                </div>
+            </div>
 
-			<div class="app-alert d-none" id="mensagemParticipante"></div>
-		</main>
-	</section>
+            <div class="app-alert d-none" id="mensagemParticipante"></div>
+        </main>
+    </section>
 
-	<footer class="site-footer">
-		<div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
-			<span>© 2026 EventHub</span>
-			<span>Sistema de gestão de eventos e workshops</span>
-		</div>
-	</footer>
+    <footer class="site-footer">
+        <div class="container d-flex flex-column flex-md-row justify-content-between gap-2">
+            <span>© 2026 EventHub</span>
+            <span>Sistema de gestão de eventos e workshops</span>
+        </div>
+    </footer>
 
     <div class="modal fade" id="modalExclusao" tabindex="-1" aria-labelledby="modalExclusaoTitulo" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
