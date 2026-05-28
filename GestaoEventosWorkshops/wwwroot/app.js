@@ -541,7 +541,7 @@ function configurarPermissoesInterface() {
     elementos.abaOrganizadoresItem.classList.toggle("d-none", !admin);
 	elementos.nomedapagina.textContent = admin ? "Área do Administrador" : "Área do Organizador";
     atualizarHeaderUsuario();
-    [elementos.eventoForm, elementos.workshopForm, elementos.inscricaoForm].forEach(form => {
+    [elementos.eventoForm, elementos.workshopForm].forEach(form => {
         form.closest(".col-12").classList.toggle("d-none", !admin);
     });
 }

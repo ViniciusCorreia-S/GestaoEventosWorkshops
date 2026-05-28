@@ -8,6 +8,7 @@ public interface IInscricaoService
     Task<List<InscricaoResponseDto>> ListarPorOrganizadorAsync(int organizadorId);
     Task<List<InscricaoResponseDto>> ListarPorParticipanteAsync(int participanteId);
     Task<InscricaoResponseDto> CriarAsync(InscricaoCreateDto dto);
+    Task<InscricaoResponseDto> CriarPorOrganizadorAsync(InscricaoCreateDto dto, int organizadorId);
     Task<InscricaoResponseDto?> AtualizarStatusAsync(int id, InscricaoStatusUpdateDto dto);
     Task<InscricaoResponseDto?> AtualizarStatusPorOrganizadorAsync(int id, int organizadorId, InscricaoStatusUpdateDto dto);
     Task<bool> RemoverAsync(int id);

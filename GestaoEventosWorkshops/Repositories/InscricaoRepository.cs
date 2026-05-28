@@ -68,6 +68,12 @@ public class InscricaoRepository : IInscricaoRepository
         return await _context.Workshops.AnyAsync(workshop => workshop.Id == workshopId);
     }
 
+    public async Task<bool> WorkshopPertenceAoOrganizadorAsync(int workshopId, int organizadorId)
+    {
+        return await _context.Workshops.AnyAsync(workshop =>
+            workshop.Id == workshopId && workshop.Evento!.OrganizadorId == organizadorId);
+    }
+
     public async Task AdicionarAsync(InscricaoWorkshop inscricao)
     {
         await _context.InscricoesWorkshops.AddAsync(inscricao);

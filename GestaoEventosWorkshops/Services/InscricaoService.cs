@@ -37,6 +37,19 @@ public class InscricaoService : IInscricaoService
 
     public async Task<InscricaoResponseDto> CriarAsync(InscricaoCreateDto dto)
     {
+        return await CriarValidadaAsync(dto);
+    }
+
+    public async Task<InscricaoResponseDto> CriarPorOrganizadorAsync(InscricaoCreateDto dto, int organizadorId)
+    {
+        if (!await _inscricaoRepository.WorkshopPertenceAoOrganizadorAsync(dto.WorkshopId, organizadorId))
+            throw new UnauthorizedAccessException("Voce so pode realizar inscricoes em workshops dos eventos sob sua responsabilidade.");
+
+        return await CriarValidadaAsync(dto);
+    }
+
+    private async Task<InscricaoResponseDto> CriarValidadaAsync(InscricaoCreateDto dto)
+    {
         // Validar se o participante existe e estÃ¡ ativo
         var participante = await _participanteRepository.BuscarPorIdAsync(dto.ParticipanteId);
         if (participante is null)

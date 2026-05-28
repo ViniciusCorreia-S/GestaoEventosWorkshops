@@ -10,6 +10,7 @@ public interface IInscricaoRepository
     Task<InscricaoWorkshop?> BuscarPorIdAsync(int id);
     Task<bool> ExisteInscricaoAsync(int participanteId, int workshopId);
     Task<bool> ExisteWorkshopAsync(int workshopId);
+    Task<bool> WorkshopPertenceAoOrganizadorAsync(int workshopId, int organizadorId);
     Task AdicionarAsync(InscricaoWorkshop inscricao);
     Task AtualizarAsync(InscricaoWorkshop inscricao);
     Task RemoverAsync(InscricaoWorkshop inscricao);

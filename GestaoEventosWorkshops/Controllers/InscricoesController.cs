@@ -63,12 +63,25 @@ public class InscricoesController : ControllerBase
     }
 
     [HttpPost]
-    [Authorize(Policy = "SomenteAdministrador")]
+    [Authorize(Policy = "EquipeEventos")]
     public async Task<IActionResult> Post([FromBody] InscricaoCreateDto dto)
     {
         try
         {
-            var inscricao = await _service.CriarAsync(dto);
+            InscricaoResponseDto inscricao;
+
+            if (User.IsInRole("Organizador"))
+            {
+                if (!TryGetOrganizadorId(out var organizadorId))
+                    return Forbid();
+
+                inscricao = await _service.CriarPorOrganizadorAsync(dto, organizadorId);
+            }
+            else
+            {
+                inscricao = await _service.CriarAsync(dto);
+            }
+
             return Created(string.Empty, new
             {
                 sucesso = true,
@@ -79,6 +92,10 @@ public class InscricoesController : ControllerBase
         catch (InvalidOperationException ex)
         {
             return BadRequest(new { sucesso = false, mensagem = ex.Message });
+        }
+        catch (UnauthorizedAccessException ex)
+        {
+            return StatusCode(StatusCodes.Status403Forbidden, new { sucesso = false, mensagem = ex.Message });
         }
     }
 
